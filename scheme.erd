@@ -1,0 +1,1307 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dineug/erd-editor/main/json-schema/schema.json",
+  "version": "3.0.0",
+  "settings": {
+    "width": 2000,
+    "height": 2000,
+    "scrollTop": -40.8856,
+    "scrollLeft": -28,
+    "zoomLevel": 1,
+    "show": 431,
+    "database": 4,
+    "databaseName": "",
+    "canvasType": "ERD",
+    "language": 1,
+    "tableNameCase": 4,
+    "columnNameCase": 2,
+    "bracketType": 1,
+    "relationshipDataTypeSync": true,
+    "relationshipOptimization": false,
+    "columnOrder": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "maxWidthComment": -1,
+    "ignoreSaveSettings": 0
+  },
+  "doc": {
+    "tableIds": [
+      "ypxSA8CNzEB4BCMPCaubY",
+      "-bvx5DKT2P8L39Yw_PEiK",
+      "dVQhdGW3nz4CasI6BRkS6",
+      "B7uBhFQ7qM4mZb8CqdMNG",
+      "YJSiqQ6sB5tLUag1g5blN",
+      "VjSuRxXsSowK6tpw2pTE8",
+      "FmZLYWhO4Udkr8k5DqVlg",
+      "A73h4DPSw-I9GcvbyFete"
+    ],
+    "relationshipIds": [
+      "vN59C_TcTLA2dLoCa1CKR",
+      "JUlIP_TQu2fR9_wDVktEd",
+      "_gbv_nWHs1Ig5ZnuYE08M",
+      "XlnIwjePMRIotfwTqI2vK",
+      "BcKtQ_1DcrPxKUlXWzosB",
+      "cTF0R1fPQGa7O3ShgG4wb",
+      "6v1PGZx-vLTi-_5pVZNxC"
+    ],
+    "indexIds": [],
+    "memoIds": []
+  },
+  "collections": {
+    "tableEntities": {
+      "LnnJqWeNLiMukbYVwF5QD": {
+        "id": "LnnJqWeNLiMukbYVwF5QD",
+        "name": "",
+        "comment": "",
+        "columnIds": [],
+        "seqColumnIds": [],
+        "ui": {
+          "x": 170,
+          "y": 195.151,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778378691078,
+          "createAt": 1778378689382
+        }
+      },
+      "ypxSA8CNzEB4BCMPCaubY": {
+        "id": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "Hospital",
+        "comment": "",
+        "columnIds": [
+          "ZEhsjmLEypuKTrNA5kT5x",
+          "woq_x-s6imyR0GFLf9CR2",
+          "17hZPC53yMYmjV0OlQSw7",
+          "IfaXMNJHmPNm9JkgGv4s8",
+          "PlnJ15eq2z0sVga32w93A",
+          "16CsXd2Y73hLFnvy27sk3",
+          "4f8WxRWtISZQ7LwZzBj5N",
+          "6fKsrdcMjOBv5QdBB9Ncj"
+        ],
+        "seqColumnIds": [
+          "ZEhsjmLEypuKTrNA5kT5x",
+          "woq_x-s6imyR0GFLf9CR2",
+          "17hZPC53yMYmjV0OlQSw7",
+          "sKnSXVsUzXHzairVGNkvH",
+          "IfaXMNJHmPNm9JkgGv4s8",
+          "PlnJ15eq2z0sVga32w93A",
+          "16CsXd2Y73hLFnvy27sk3",
+          "74WcJlxjSL1LsLe31kZlY",
+          "4f8WxRWtISZQ7LwZzBj5N",
+          "wFK2B9VRXg4snBGaUpZ8f",
+          "6fKsrdcMjOBv5QdBB9Ncj"
+        ],
+        "ui": {
+          "x": 486,
+          "y": 244.151,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778424973166,
+          "createAt": 1778378708035
+        }
+      },
+      "V9wnr1DThI1hZ629cqXhp": {
+        "id": "V9wnr1DThI1hZ629cqXhp",
+        "name": "HospitalDetail",
+        "comment": "",
+        "columnIds": [
+          "gOE17TNuSlZw0xFUVAtpJ",
+          "C7D9IKHC7KuNXhcTLAj9I"
+        ],
+        "seqColumnIds": [
+          "WeVl0ElyXFhebSZQDSBKx",
+          "gOE17TNuSlZw0xFUVAtpJ",
+          "C7D9IKHC7KuNXhcTLAj9I"
+        ],
+        "ui": {
+          "x": 542,
+          "y": 237,
+          "zIndex": 84,
+          "widthName": 81,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778379393827,
+          "createAt": 1778379224815
+        }
+      },
+      "-bvx5DKT2P8L39Yw_PEiK": {
+        "id": "-bvx5DKT2P8L39Yw_PEiK",
+        "name": "HospitalEquipment",
+        "comment": "",
+        "columnIds": [
+          "Ahak7XH3EN-z6IP3L5fbF",
+          "0e73-hgvcOhUoDIX0Y0ql"
+        ],
+        "seqColumnIds": [
+          "M8TovFqQQZznvoqrSQr8c",
+          "qFGz-CPF32miptGe-T6y2",
+          "Ahak7XH3EN-z6IP3L5fbF",
+          "vv2uDBtBHr3VEvgDzKlF0",
+          "0e73-hgvcOhUoDIX0Y0ql"
+        ],
+        "ui": {
+          "x": -8,
+          "y": 648,
+          "zIndex": 108,
+          "widthName": 109,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778499381939,
+          "createAt": 1778379457877
+        }
+      },
+      "dVQhdGW3nz4CasI6BRkS6": {
+        "id": "dVQhdGW3nz4CasI6BRkS6",
+        "name": "HospitalSubject",
+        "comment": "",
+        "columnIds": [
+          "fe3ZL7mG0agt_FMkd5eHT",
+          "bDpEuR1UCsRkqjjnbPY33"
+        ],
+        "seqColumnIds": [
+          "2bN1H-R7KuePsHdGRe8Q6",
+          "N778yFdQ86XoSEUSWjJ_u",
+          "cbvpEsIxXpI0HpMnBABcx",
+          "fe3ZL7mG0agt_FMkd5eHT",
+          "bDpEuR1UCsRkqjjnbPY33",
+          "miKIYbudjBkVxlrEawskb"
+        ],
+        "ui": {
+          "x": 487,
+          "y": 662,
+          "zIndex": 147,
+          "widthName": 92,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778424794207,
+          "createAt": 1778379572927
+        }
+      },
+      "B7uBhFQ7qM4mZb8CqdMNG": {
+        "id": "B7uBhFQ7qM4mZb8CqdMNG",
+        "name": "VectorStore",
+        "comment": "",
+        "columnIds": [
+          "2A-ntuzyYhu0B9ZonlHX8",
+          "zoA8KLNLqcInZKdM-w9wp",
+          "5Y19jDBfHtnbbrpwxKJG2"
+        ],
+        "seqColumnIds": [
+          "2A-ntuzyYhu0B9ZonlHX8",
+          "zoA8KLNLqcInZKdM-w9wp",
+          "5Y19jDBfHtnbbrpwxKJG2"
+        ],
+        "ui": {
+          "x": 461,
+          "y": 3,
+          "zIndex": 184,
+          "widthName": 69,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778424823439,
+          "createAt": 1778379892584
+        }
+      },
+      "YJSiqQ6sB5tLUag1g5blN": {
+        "id": "YJSiqQ6sB5tLUag1g5blN",
+        "name": "EquipmentMaster",
+        "comment": "의료장비 마스터 테이블",
+        "columnIds": [
+          "6cLkDsKi1iZCvC6Q0SlZd",
+          "x6oydNPbihy5qIkMRDNfM"
+        ],
+        "seqColumnIds": [
+          "6cLkDsKi1iZCvC6Q0SlZd",
+          "x6oydNPbihy5qIkMRDNfM"
+        ],
+        "ui": {
+          "x": 7,
+          "y": 909,
+          "zIndex": 187,
+          "widthName": 101,
+          "widthComment": 113,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778424843978,
+          "createAt": 1778424166095
+        }
+      },
+      "VjSuRxXsSowK6tpw2pTE8": {
+        "id": "VjSuRxXsSowK6tpw2pTE8",
+        "name": "SubjectMaster",
+        "comment": "진료과목 마스터 테이블",
+        "columnIds": [
+          "znzP3NOWnwqdEHBttW_Or",
+          "sIQQDJF4s5IoYUWV7h6Ec"
+        ],
+        "seqColumnIds": [
+          "znzP3NOWnwqdEHBttW_Or",
+          "sIQQDJF4s5IoYUWV7h6Ec"
+        ],
+        "ui": {
+          "x": 503,
+          "y": 910,
+          "zIndex": 198,
+          "widthName": 84,
+          "widthComment": 113,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778425149519,
+          "createAt": 1778424208271
+        }
+      },
+      "FmZLYWhO4Udkr8k5DqVlg": {
+        "id": "FmZLYWhO4Udkr8k5DqVlg",
+        "name": "SpecialSubjectMaster",
+        "comment": "특수진료과목 마스터 테이블",
+        "columnIds": [
+          "yInUoJpbMarIg7fkS8pLo",
+          "bnEbJK83h_5kqc1J6ucYe"
+        ],
+        "seqColumnIds": [
+          "yInUoJpbMarIg7fkS8pLo",
+          "bnEbJK83h_5kqc1J6ucYe"
+        ],
+        "ui": {
+          "x": 993,
+          "y": 911,
+          "zIndex": 207,
+          "widthName": 125,
+          "widthComment": 133,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778425156674,
+          "createAt": 1778424241141
+        }
+      },
+      "A73h4DPSw-I9GcvbyFete": {
+        "id": "A73h4DPSw-I9GcvbyFete",
+        "name": "HospitalSpecialSubject",
+        "comment": "",
+        "columnIds": [
+          "sbeEdP_ikT1XXmNIvcu00",
+          "55I10GipfV5FdoK2Ws5YB"
+        ],
+        "seqColumnIds": [
+          "sbeEdP_ikT1XXmNIvcu00",
+          "55I10GipfV5FdoK2Ws5YB"
+        ],
+        "ui": {
+          "x": 979,
+          "y": 663,
+          "zIndex": 351,
+          "widthName": 133,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1778424847202,
+          "createAt": 1778424691821
+        }
+      }
+    },
+    "tableColumnEntities": {
+      "ZEhsjmLEypuKTrNA5kT5x": {
+        "id": "ZEhsjmLEypuKTrNA5kT5x",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "hid",
+        "comment": "암호화된 요양기호",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 88,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778378953981,
+          "createAt": 1778378837382
+        }
+      },
+      "17hZPC53yMYmjV0OlQSw7": {
+        "id": "17hZPC53yMYmjV0OlQSw7",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "name",
+        "comment": "병원명",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379113647,
+          "createAt": 1778378956678
+        }
+      },
+      "woq_x-s6imyR0GFLf9CR2": {
+        "id": "woq_x-s6imyR0GFLf9CR2",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "type",
+        "comment": "병원종류",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424909909,
+          "createAt": 1778378972836
+        }
+      },
+      "sKnSXVsUzXHzairVGNkvH": {
+        "id": "sKnSXVsUzXHzairVGNkvH",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "state",
+        "comment": "도/시",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379127907,
+          "createAt": 1778378989501
+        }
+      },
+      "PlnJ15eq2z0sVga32w93A": {
+        "id": "PlnJ15eq2z0sVga32w93A",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "city",
+        "comment": "시군구명",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424895271,
+          "createAt": 1778378993230
+        }
+      },
+      "16CsXd2Y73hLFnvy27sk3": {
+        "id": "16CsXd2Y73hLFnvy27sk3",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "address",
+        "comment": "도로명주소",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424899538,
+          "createAt": 1778379000874
+        }
+      },
+      "74WcJlxjSL1LsLe31kZlY": {
+        "id": "74WcJlxjSL1LsLe31kZlY",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "subject",
+        "comment": "과목",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379171134,
+          "createAt": 1778379027318
+        }
+      },
+      "4f8WxRWtISZQ7LwZzBj5N": {
+        "id": "4f8WxRWtISZQ7LwZzBj5N",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "startdate",
+        "comment": "개설일자",
+        "dataType": "DATE",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379173906,
+          "createAt": 1778379035291
+        }
+      },
+      "WeVl0ElyXFhebSZQDSBKx": {
+        "id": "WeVl0ElyXFhebSZQDSBKx",
+        "tableId": "V9wnr1DThI1hZ629cqXhp",
+        "name": "h",
+        "comment": "",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379320651,
+          "createAt": 1778379317465
+        }
+      },
+      "gOE17TNuSlZw0xFUVAtpJ": {
+        "id": "gOE17TNuSlZw0xFUVAtpJ",
+        "tableId": "V9wnr1DThI1hZ629cqXhp",
+        "name": "hid",
+        "comment": "암호화된 요양기호",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 88,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379356865,
+          "createAt": 1778379353191
+        }
+      },
+      "C7D9IKHC7KuNXhcTLAj9I": {
+        "id": "C7D9IKHC7KuNXhcTLAj9I",
+        "tableId": "V9wnr1DThI1hZ629cqXhp",
+        "name": "",
+        "comment": "",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379378892,
+          "createAt": 1778379378892
+        }
+      },
+      "M8TovFqQQZznvoqrSQr8c": {
+        "id": "M8TovFqQQZznvoqrSQr8c",
+        "tableId": "-bvx5DKT2P8L39Yw_PEiK",
+        "name": "hid",
+        "comment": "",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379489543,
+          "createAt": 1778379484307
+        }
+      },
+      "Ahak7XH3EN-z6IP3L5fbF": {
+        "id": "Ahak7XH3EN-z6IP3L5fbF",
+        "tableId": "-bvx5DKT2P8L39Yw_PEiK",
+        "name": "hid",
+        "comment": "암호화된 요양기호",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 3,
+          "widthName": 60,
+          "widthComment": 88,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424594964,
+          "createAt": 1778379501319
+        }
+      },
+      "vv2uDBtBHr3VEvgDzKlF0": {
+        "id": "vv2uDBtBHr3VEvgDzKlF0",
+        "tableId": "-bvx5DKT2P8L39Yw_PEiK",
+        "name": "name",
+        "comment": "의료장비명",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379524439,
+          "createAt": 1778379509463
+        }
+      },
+      "qFGz-CPF32miptGe-T6y2": {
+        "id": "qFGz-CPF32miptGe-T6y2",
+        "tableId": "-bvx5DKT2P8L39Yw_PEiK",
+        "name": "id",
+        "comment": "",
+        "dataType": "",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379550231,
+          "createAt": 1778379543004
+        }
+      },
+      "2bN1H-R7KuePsHdGRe8Q6": {
+        "id": "2bN1H-R7KuePsHdGRe8Q6",
+        "tableId": "dVQhdGW3nz4CasI6BRkS6",
+        "name": "id",
+        "comment": "",
+        "dataType": "",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379587458,
+          "createAt": 1778379583296
+        }
+      },
+      "N778yFdQ86XoSEUSWjJ_u": {
+        "id": "N778yFdQ86XoSEUSWjJ_u",
+        "tableId": "dVQhdGW3nz4CasI6BRkS6",
+        "name": "hid",
+        "comment": "암호화된 요양기호",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 88,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379655016,
+          "createAt": 1778379655015
+        }
+      },
+      "cbvpEsIxXpI0HpMnBABcx": {
+        "id": "cbvpEsIxXpI0HpMnBABcx",
+        "tableId": "dVQhdGW3nz4CasI6BRkS6",
+        "name": "name",
+        "comment": "특수진료과목명",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 75,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379687148,
+          "createAt": 1778379671791
+        }
+      },
+      "wFK2B9VRXg4snBGaUpZ8f": {
+        "id": "wFK2B9VRXg4snBGaUpZ8f",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "coordinate",
+        "comment": "위도경도",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 62,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379885406,
+          "createAt": 1778379815526
+        }
+      },
+      "zoA8KLNLqcInZKdM-w9wp": {
+        "id": "zoA8KLNLqcInZKdM-w9wp",
+        "tableId": "B7uBhFQ7qM4mZb8CqdMNG",
+        "name": "embed_text",
+        "comment": "벡터를 만들기 위한 재료",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 69,
+          "widthComment": 116,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778380064754,
+          "createAt": 1778379906533
+        }
+      },
+      "2A-ntuzyYhu0B9ZonlHX8": {
+        "id": "2A-ntuzyYhu0B9ZonlHX8",
+        "tableId": "B7uBhFQ7qM4mZb8CqdMNG",
+        "name": "hid",
+        "comment": "암호화된 요양기호",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 3,
+          "widthName": 60,
+          "widthComment": 88,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778379928495,
+          "createAt": 1778379924586
+        }
+      },
+      "5Y19jDBfHtnbbrpwxKJG2": {
+        "id": "5Y19jDBfHtnbbrpwxKJG2",
+        "tableId": "B7uBhFQ7qM4mZb8CqdMNG",
+        "name": "embed_vector",
+        "comment": "벡터",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 84,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778380085469,
+          "createAt": 1778380066477
+        }
+      },
+      "6cLkDsKi1iZCvC6Q0SlZd": {
+        "id": "6cLkDsKi1iZCvC6Q0SlZd",
+        "tableId": "YJSiqQ6sB5tLUag1g5blN",
+        "name": "code",
+        "comment": "장비 코드",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424534550,
+          "createAt": 1778424380464
+        }
+      },
+      "znzP3NOWnwqdEHBttW_Or": {
+        "id": "znzP3NOWnwqdEHBttW_Or",
+        "tableId": "VjSuRxXsSowK6tpw2pTE8",
+        "name": "code",
+        "comment": "과목 코드",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424549179,
+          "createAt": 1778424403490
+        }
+      },
+      "yInUoJpbMarIg7fkS8pLo": {
+        "id": "yInUoJpbMarIg7fkS8pLo",
+        "tableId": "FmZLYWhO4Udkr8k5DqVlg",
+        "name": "code",
+        "comment": "과목 코드",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424555998,
+          "createAt": 1778424416262
+        }
+      },
+      "x6oydNPbihy5qIkMRDNfM": {
+        "id": "x6oydNPbihy5qIkMRDNfM",
+        "tableId": "YJSiqQ6sB5tLUag1g5blN",
+        "name": "name",
+        "comment": "장비명",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424537812,
+          "createAt": 1778424425345
+        }
+      },
+      "sIQQDJF4s5IoYUWV7h6Ec": {
+        "id": "sIQQDJF4s5IoYUWV7h6Ec",
+        "tableId": "VjSuRxXsSowK6tpw2pTE8",
+        "name": "name",
+        "comment": "과목명",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424552279,
+          "createAt": 1778424433063
+        }
+      },
+      "bnEbJK83h_5kqc1J6ucYe": {
+        "id": "bnEbJK83h_5kqc1J6ucYe",
+        "tableId": "FmZLYWhO4Udkr8k5DqVlg",
+        "name": "name",
+        "comment": "과목명",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424559379,
+          "createAt": 1778424437680
+        }
+      },
+      "0e73-hgvcOhUoDIX0Y0ql": {
+        "id": "0e73-hgvcOhUoDIX0Y0ql",
+        "tableId": "-bvx5DKT2P8L39Yw_PEiK",
+        "name": "code",
+        "comment": "장비 코드",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 3,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424593801,
+          "createAt": 1778424585022
+        }
+      },
+      "fe3ZL7mG0agt_FMkd5eHT": {
+        "id": "fe3ZL7mG0agt_FMkd5eHT",
+        "tableId": "dVQhdGW3nz4CasI6BRkS6",
+        "name": "hid",
+        "comment": "암호화된 요양기호",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 3,
+          "widthName": 60,
+          "widthComment": 88,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424680070,
+          "createAt": 1778424652756
+        }
+      },
+      "bDpEuR1UCsRkqjjnbPY33": {
+        "id": "bDpEuR1UCsRkqjjnbPY33",
+        "tableId": "dVQhdGW3nz4CasI6BRkS6",
+        "name": "code",
+        "comment": "과목 코드",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 3,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424681187,
+          "createAt": 1778424658067
+        }
+      },
+      "miKIYbudjBkVxlrEawskb": {
+        "id": "miKIYbudjBkVxlrEawskb",
+        "tableId": "dVQhdGW3nz4CasI6BRkS6",
+        "name": "Equipment",
+        "comment": "",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 62,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424688702,
+          "createAt": 1778424688701
+        }
+      },
+      "sbeEdP_ikT1XXmNIvcu00": {
+        "id": "sbeEdP_ikT1XXmNIvcu00",
+        "tableId": "A73h4DPSw-I9GcvbyFete",
+        "name": "hid",
+        "comment": "암호화된 요양기호",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 3,
+          "widthName": 60,
+          "widthComment": 88,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424784736,
+          "createAt": 1778424779082
+        }
+      },
+      "55I10GipfV5FdoK2Ws5YB": {
+        "id": "55I10GipfV5FdoK2Ws5YB",
+        "tableId": "A73h4DPSw-I9GcvbyFete",
+        "name": "code",
+        "comment": "과목 코드",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 3,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424785701,
+          "createAt": 1778424782633
+        }
+      },
+      "IfaXMNJHmPNm9JkgGv4s8": {
+        "id": "IfaXMNJHmPNm9JkgGv4s8",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "state",
+        "comment": "시도명",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778424890221,
+          "createAt": 1778424867774
+        }
+      },
+      "6fKsrdcMjOBv5QdBB9Ncj": {
+        "id": "6fKsrdcMjOBv5QdBB9Ncj",
+        "tableId": "ypxSA8CNzEB4BCMPCaubY",
+        "name": "coordinate",
+        "comment": "위도경도",
+        "dataType": "GEOMETRY",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 62,
+          "widthComment": 60,
+          "widthDataType": 68,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778425002825,
+          "createAt": 1778424973166
+        }
+      }
+    },
+    "relationshipEntities": {
+      "o8iPUGSbAkFha60QP0v3q": {
+        "id": "o8iPUGSbAkFha60QP0v3q",
+        "identification": true,
+        "relationshipType": 8,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "ypxSA8CNzEB4BCMPCaubY",
+          "columnIds": [
+            "ZEhsjmLEypuKTrNA5kT5x"
+          ],
+          "x": 485,
+          "y": 226.151,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "V9wnr1DThI1hZ629cqXhp",
+          "columnIds": [
+            "gOE17TNuSlZw0xFUVAtpJ"
+          ],
+          "x": 542,
+          "y": 289,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 1778379353192,
+          "createAt": 1778379353192
+        }
+      },
+      "vN59C_TcTLA2dLoCa1CKR": {
+        "id": "vN59C_TcTLA2dLoCa1CKR",
+        "identification": true,
+        "relationshipType": 4,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "ypxSA8CNzEB4BCMPCaubY",
+          "columnIds": [
+            "ZEhsjmLEypuKTrNA5kT5x"
+          ],
+          "x": 486,
+          "y": 368.151,
+          "direction": 1
+        },
+        "end": {
+          "tableId": "-bvx5DKT2P8L39Yw_PEiK",
+          "columnIds": [
+            "Ahak7XH3EN-z6IP3L5fbF"
+          ],
+          "x": 385,
+          "y": 700,
+          "direction": 2
+        },
+        "meta": {
+          "updateAt": 1778379501319,
+          "createAt": 1778379501319
+        }
+      },
+      "ymyLUg84yXz1XGFvvwa5O": {
+        "id": "ymyLUg84yXz1XGFvvwa5O",
+        "identification": false,
+        "relationshipType": 4,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "ypxSA8CNzEB4BCMPCaubY",
+          "columnIds": [
+            "ZEhsjmLEypuKTrNA5kT5x"
+          ],
+          "x": 539.25,
+          "y": 526.1510000000001,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "dVQhdGW3nz4CasI6BRkS6",
+          "columnIds": [
+            "N778yFdQ86XoSEUSWjJ_u"
+          ],
+          "x": 619,
+          "y": 688,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 1778379655016,
+          "createAt": 1778379655016
+        }
+      },
+      "JUlIP_TQu2fR9_wDVktEd": {
+        "id": "JUlIP_TQu2fR9_wDVktEd",
+        "identification": true,
+        "relationshipType": 8,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "ypxSA8CNzEB4BCMPCaubY",
+          "columnIds": [
+            "ZEhsjmLEypuKTrNA5kT5x"
+          ],
+          "x": 687.5,
+          "y": 244.151,
+          "direction": 4
+        },
+        "end": {
+          "tableId": "B7uBhFQ7qM4mZb8CqdMNG",
+          "columnIds": [
+            "2A-ntuzyYhu0B9ZonlHX8"
+          ],
+          "x": 683.5,
+          "y": 131,
+          "direction": 8
+        },
+        "meta": {
+          "updateAt": 1778379924586,
+          "createAt": 1778379924586
+        }
+      },
+      "_gbv_nWHs1Ig5ZnuYE08M": {
+        "id": "_gbv_nWHs1Ig5ZnuYE08M",
+        "identification": true,
+        "relationshipType": 4,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "YJSiqQ6sB5tLUag1g5blN",
+          "columnIds": [
+            "6cLkDsKi1iZCvC6Q0SlZd"
+          ],
+          "x": 189.5,
+          "y": 909,
+          "direction": 4
+        },
+        "end": {
+          "tableId": "-bvx5DKT2P8L39Yw_PEiK",
+          "columnIds": [
+            "0e73-hgvcOhUoDIX0Y0ql"
+          ],
+          "x": 188.5,
+          "y": 752,
+          "direction": 8
+        },
+        "meta": {
+          "updateAt": 1778424585022,
+          "createAt": 1778424585022
+        }
+      },
+      "XlnIwjePMRIotfwTqI2vK": {
+        "id": "XlnIwjePMRIotfwTqI2vK",
+        "identification": true,
+        "relationshipType": 4,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "ypxSA8CNzEB4BCMPCaubY",
+          "columnIds": [
+            "ZEhsjmLEypuKTrNA5kT5x"
+          ],
+          "x": 687.5,
+          "y": 492.151,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "dVQhdGW3nz4CasI6BRkS6",
+          "columnIds": [
+            "fe3ZL7mG0agt_FMkd5eHT"
+          ],
+          "x": 683.5,
+          "y": 662,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 1778424652756,
+          "createAt": 1778424652756
+        }
+      },
+      "BcKtQ_1DcrPxKUlXWzosB": {
+        "id": "BcKtQ_1DcrPxKUlXWzosB",
+        "identification": true,
+        "relationshipType": 4,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "VjSuRxXsSowK6tpw2pTE8",
+          "columnIds": [
+            "znzP3NOWnwqdEHBttW_Or"
+          ],
+          "x": 685.5,
+          "y": 910,
+          "direction": 4
+        },
+        "end": {
+          "tableId": "dVQhdGW3nz4CasI6BRkS6",
+          "columnIds": [
+            "bDpEuR1UCsRkqjjnbPY33"
+          ],
+          "x": 683.5,
+          "y": 766,
+          "direction": 8
+        },
+        "meta": {
+          "updateAt": 1778424658067,
+          "createAt": 1778424658067
+        }
+      },
+      "cTF0R1fPQGa7O3ShgG4wb": {
+        "id": "cTF0R1fPQGa7O3ShgG4wb",
+        "identification": true,
+        "relationshipType": 4,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "ypxSA8CNzEB4BCMPCaubY",
+          "columnIds": [
+            "ZEhsjmLEypuKTrNA5kT5x"
+          ],
+          "x": 889,
+          "y": 368.151,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "A73h4DPSw-I9GcvbyFete",
+          "columnIds": [
+            "sbeEdP_ikT1XXmNIvcu00"
+          ],
+          "x": 979,
+          "y": 715,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 1778424779083,
+          "createAt": 1778424779083
+        }
+      },
+      "6v1PGZx-vLTi-_5pVZNxC": {
+        "id": "6v1PGZx-vLTi-_5pVZNxC",
+        "identification": true,
+        "relationshipType": 4,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "FmZLYWhO4Udkr8k5DqVlg",
+          "columnIds": [
+            "yInUoJpbMarIg7fkS8pLo"
+          ],
+          "x": 1175.5,
+          "y": 911,
+          "direction": 4
+        },
+        "end": {
+          "tableId": "A73h4DPSw-I9GcvbyFete",
+          "columnIds": [
+            "55I10GipfV5FdoK2Ws5YB"
+          ],
+          "x": 1175.5,
+          "y": 767,
+          "direction": 8
+        },
+        "meta": {
+          "updateAt": 1778424782633,
+          "createAt": 1778424782633
+        }
+      }
+    },
+    "indexEntities": {},
+    "indexColumnEntities": {},
+    "memoEntities": {}
+  }
+}
