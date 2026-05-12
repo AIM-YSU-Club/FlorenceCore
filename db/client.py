@@ -24,11 +24,11 @@ with engine.connect() as conn:
     print('DB 연결 성공')
 
 Base = declarative_base()
-from models import *
+from db.models import *
 Base.metadata.create_all(engine)
 
 # ollama를 호출해 임베딩하고, VectorDB에 저장하고, 검색 기능을 제공하는 클래스
-class PGManager:
+class PSQLClient:
     # 생성자 메서드
     def __init__(self):
         pass

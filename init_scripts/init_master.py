@@ -1,7 +1,7 @@
-from postgres import PGManager
+from db.client import PSQLClient
 import requests, os, dotenv
 import xml.etree.ElementTree as ET
-from models import EquipmentMaster, SubjectMaster, SpecialSubjectMaster
+from db.models import EquipmentMaster, SubjectMaster, SpecialSubjectMaster
 
 dotenv.load_dotenv()
 
@@ -18,7 +18,7 @@ SERVICES = {
 }
 
 def initMasterTable(service: str):
-    pgm = PGManager()
+    pgm = PSQLClient()
 
     url = f'{APIConfig.API_ENDPOINT}/{SERVICES[service]}'
     params = {

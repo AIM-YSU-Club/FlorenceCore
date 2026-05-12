@@ -26,7 +26,7 @@ class VectorSearchResqust(BaseModel):
     query: str
 
 # 임베딩 매니저
-class VSManager():
+class FAISSClient():
     def __init__(self):
         self.embeddings_model = HuggingFaceEmbeddings(
             model_name=Config.EMBEDDING_MODEL,
@@ -45,8 +45,8 @@ def read_root():
 @app.post('/search_test')
 async def search_test(req: VectorSearchResqust):
     documents = [Document(page_content=t) for t in req.texts]
-    vsm = VSManager()
-    vs = vsm.createVectorStore(documents)
+    faiss = FAISSClient()
+    vs = faiss.createVectorStore(documents)
     results = vs.similarity_search_with_score(
         query=req.query,
         k=3

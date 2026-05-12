@@ -1,6 +1,6 @@
 from init_scripts.api import APIParser
-from postgres import PGManager
-from models import *
+from db.client import PSQLClient
+from db.models import *
 from sqlalchemy import exists
 import requests, os, dotenv
 import xml.etree.ElementTree as ET
@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 dotenv.load_dotenv()
 
 apip = APIParser()
-pgm = PGManager()
+pgm = PSQLClient()
 
 class APIConfig:
     API_ENDPOINT = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2.7'
