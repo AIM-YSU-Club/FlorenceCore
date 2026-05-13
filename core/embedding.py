@@ -150,14 +150,20 @@ f"""
         )
         new_rows.append(ss_new_row)
 
-
-    with client.getSession() as session:
-        try:
-            session.add_all(new_rows)
-            session.commit()
-        except Exception as e:
-            session.rollback()
-            print(f'DB 커밋 실패: {e}')
+    total_rows = len(new_rows)
+    batch_size = 200
+    for i in range(0, total_rows, batch_size):
+        batch = new_rows[i : i + batch_size]
+        
+        with client.getSession() as session:
+            try:
+                session.add_all(batch)
+                session.commit()
+                print(f"[{i + len(batch)} / {total_rows}] 데이터 삽입 성공")
+            except Exception as e:
+                session.rollback()
+                print(f"[{i}번째부터] 삽입 실패: {e}")
+                # 필요하다면 여기서 break를 걸어 중단할 수 있습니다.
 
 if __name__ == "__main__":
     generateVectorStore()
