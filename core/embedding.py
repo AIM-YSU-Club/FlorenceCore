@@ -128,15 +128,15 @@ f"""
 """
             )
             )
-    es_info_texts = es_info_texts[:50] # for test
-    ss_info_texts = ss_info_texts[:50] # for test
+    # es_info_texts = es_info_texts[:50] # for test
+    # ss_info_texts = ss_info_texts[:50] # for test
     print(f'임베딩할 총 문서 수: {len(es_info_texts) + len(ss_info_texts)}')
     
     em = EmbeddingManager()
     es_info_vectors = em.embed_texts(es_info_texts)
     ss_info_vectors = em.embed_texts([t[1] for t in ss_info_texts])
     new_rows = []
-    hids = list(hids)[:50] # for test
+    # hids = list(hids)[:50] # for test
 
     for i, hid in enumerate(hids):
         es_new_row = VectorStore(
