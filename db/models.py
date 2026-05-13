@@ -123,7 +123,7 @@ class VectorStore(Base):
 
     # DB에서 자동으로 생성되는 UUID를 PK로 인식하도록 추가
     # insert 시 값을 보내지 않으므로 autoincrement와 유사하게 동작하도록 설정
-    uuid = Column(UUID(as_uuid=True), primary_key=True, server_default=func.uuid_generate_v4())
+    uuid = Column(UUID(as_uuid=True), primary_key=True)
     
     # hid는 이제 PK가 아닌 일반 외래키 컬럼입니다.
     hid = Column(String(255), ForeignKey('hospital.hid', ondelete='CASCADE'), nullable=False)
