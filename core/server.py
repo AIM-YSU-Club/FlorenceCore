@@ -21,7 +21,7 @@ class Config():
     OLLAMA_EMBEDDING_MODEL=os.getenv('OLLAMA_EMBEDDING_MODEL')
     ENCODE_KWARGS={'normalize_embeddings': True}
     HF_TOKEN=os.getenv('HF_TOKEN')
-    SERVER_PORT=os.getenv('SERVER_PORT')
+    SERVER_PORT=int(os.getenv('SERVER_PORT'))
 
 # GPU 가속 가능 여부
 match Config.ACCELERATION_DEVICE:
