@@ -4,8 +4,8 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -40.8856,
-    "scrollLeft": -28,
+    "scrollTop": 0,
+    "scrollLeft": -89,
     "zoomLevel": 1,
     "show": 431,
     "database": 4,
@@ -201,11 +201,13 @@
         "name": "VectorStore",
         "comment": "",
         "columnIds": [
+          "h6oWuGLfYpJqOyYB8lU1U",
           "2A-ntuzyYhu0B9ZonlHX8",
           "zoA8KLNLqcInZKdM-w9wp",
           "5Y19jDBfHtnbbrpwxKJG2"
         ],
         "seqColumnIds": [
+          "h6oWuGLfYpJqOyYB8lU1U",
           "2A-ntuzyYhu0B9ZonlHX8",
           "zoA8KLNLqcInZKdM-w9wp",
           "5Y19jDBfHtnbbrpwxKJG2"
@@ -219,7 +221,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1778424823439,
+          "updateAt": 1778634336572,
           "createAt": 1778379892584
         }
       },
@@ -732,16 +734,16 @@
         "comment": "암호화된 요양기호",
         "dataType": "VARCHAR",
         "default": "",
-        "options": 10,
+        "options": 8,
         "ui": {
-          "keys": 3,
+          "keys": 2,
           "widthName": 60,
           "widthComment": 88,
           "widthDataType": 60,
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1778379928495,
+          "updateAt": 1778634343684,
           "createAt": 1778379924586
         }
       },
@@ -1044,6 +1046,26 @@
           "updateAt": 1778425002825,
           "createAt": 1778424973166
         }
+      },
+      "h6oWuGLfYpJqOyYB8lU1U": {
+        "id": "h6oWuGLfYpJqOyYB8lU1U",
+        "tableId": "B7uBhFQ7qM4mZb8CqdMNG",
+        "name": "doc_id",
+        "comment": "",
+        "dataType": "UUID",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1778634470633,
+          "createAt": 1778634303021
+        }
       }
     },
     "relationshipEntities": {
@@ -1133,7 +1155,7 @@
       },
       "JUlIP_TQu2fR9_wDVktEd": {
         "id": "JUlIP_TQu2fR9_wDVktEd",
-        "identification": true,
+        "identification": false,
         "relationshipType": 8,
         "startRelationshipType": 2,
         "start": {
@@ -1151,7 +1173,7 @@
             "2A-ntuzyYhu0B9ZonlHX8"
           ],
           "x": 683.5,
-          "y": 131,
+          "y": 155,
           "direction": 8
         },
         "meta": {
