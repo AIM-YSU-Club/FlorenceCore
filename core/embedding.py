@@ -101,10 +101,10 @@ def generateVectorStore():
             h_ssm_dict[h.hid].append(f'{ssm.name}: {ssm.comment}')
     
 
-    print(len(h_info_dict))
-    print(len(h_em_dict))
-    print(len(h_sm_dict))
-    print(len(h_ssm_dict))
+    print(f'Hospital: {len(h_info_dict)}')
+    print(f'Hospital-Equipment: {len(h_em_dict)}')
+    print(f'Hospital-Subject: {len(h_sm_dict)}')
+    print(f'Hospital-SpecialSubject: {len(h_ssm_dict)}')
 
     hids = h_info_dict.keys()
     es_info_texts = []
@@ -127,6 +127,8 @@ f"""
 """
             )
             )
+    print(f'임베딩할 총 문서 수: {len(es_info_texts) + len(ss_info_texts)}')
+    
     em = EmbeddingManager()
     es_info_vectors = em.embed_texts(es_info_texts)
     ss_info_vectors = em.embed_texts([t[1] for t in ss_info_texts])
