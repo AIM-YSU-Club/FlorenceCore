@@ -135,7 +135,7 @@ f"""
     es_info_vectors = em.embed_texts(es_info_texts)
     ss_info_vectors = em.embed_texts([t[1] for t in ss_info_texts])
     new_rows = []
-    hids = list(hids)[:100] # for test
+    hids = list(hids)[:50] # for test
 
     for i, hid in enumerate(hids):
         es_new_row = VectorStore(
