@@ -34,7 +34,10 @@ class EmbeddingManager():
             base_url=Config.OLLAMA_BASE_URL,
             model=Config.OLLAMA_EMBEDDING_MODEL
         )
-    def embed_texts(self, texts: list) -> list[float]:
+    def embed_text(self, text: str):
+        return self.embedding_model.embed_query(text)
+
+    def embed_texts(self, texts: list):
         return self.embedding_model.embed_documents(texts)
 
 def generateVectorStore():

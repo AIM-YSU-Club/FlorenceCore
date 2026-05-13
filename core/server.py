@@ -1,14 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_ollama import OllamaEmbeddings
 from typing import List
-from langchain_community.vectorstores import FAISS
-from langchain_community.vectorstores.utils import DistanceStrategy
 from langchain_core.documents import Document
 import dotenv, os
 from huggingface_hub import login
 import torch
+from db.client import PSQLClient
+from db.models import *
+from embedding import EmbeddingManager
 
 dotenv.load_dotenv()
 
@@ -51,29 +50,6 @@ class VectorSearchResqust(BaseModel):
     texts: List[str]
     query: str
 
-# FAISS 벡터DB 구축 클라이언트
-class FAISSClient():
-    def __init__(self):
-        # HuggingFace 임베딩. 지금은 안씀
-        # self.embeddings_model = HuggingFaceEmbeddings(
-        #     model_name=Config.EMBEDDING_MODEL,
-        #     encode_kwargs=Config.ENCODE_KWARGS,
-        #     model_kwargs={
-        #         'device': Config.ACCELERATION_DEVICE
-        #     }
-        # )
-        self.embedding_model = OllamaEmbeddings(
-            base_url=Config.OLLAMA_EMBEDDING_MODEL,
-
-        )
-
-    def createVectorStore(self, documents: list[Document]):
-        return FAISS.from_documents(
-            documents, 
-            self.embeddings_model,
-            distance_strategy=DistanceStrategy.COSINE
-        )
-
 # API 엔드포인트 구현
 # root 엔드포인트 (서버 작동여부 확인용)
 @app.get("/")
@@ -82,17 +58,17 @@ def read_root():
 
 # 테스트용 검색 엔드포인트
 @app.post('/search_test')
-async def search_test(req: VectorSearchResqust):
-    documents = [Document(page_content=t) for t in req.texts]
-    faiss = FAISSClient()
-    vs = faiss.createVectorStore(documents)
-    results = vs.similarity_search_with_relevance_scores(
-        query=req.query,
-        k=3
-    )
+async def search_test(req: TextRequest):
+    client = PSQLClient()
+    em = EmbeddingManager()
+
+    vector = em.embed_text(req.text)
+
+    with client.getSession() as session:
+        results = session.query(VectorStore).order_by(VectorStore.embed_vector.cosine_distance(vector)).limit(5).all()
+
     return {
-        'results': [r[0].page_content for r in results],
-        'scores': [float(r[1]) for r in results]
+        'results': [r.embed_text for r in results]
     }
 
 # 서버 실행 (스크립트로 실행 시)
