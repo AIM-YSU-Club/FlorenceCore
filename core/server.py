@@ -7,7 +7,7 @@ from huggingface_hub import login
 import torch
 from db.client import PSQLClient
 from db.models import *
-from embedding import EmbeddingManager
+from core.embedding import EmbeddingManager
 
 dotenv.load_dotenv()
 
