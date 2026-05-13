@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Text, Date, ForeignKey, Index, PrimaryKeyConstraint
+from sqlalchemy import Column, String, Text, Date, ForeignKey, Index, PrimaryKeyConstraint, UUID
 from sqlalchemy.orm import declarative_base, relationship
 from geoalchemy2 import Geometry
 from pgvector.sqlalchemy import Vector
@@ -118,18 +118,21 @@ class HospitalSpecialSubject(Base):
 # ==========================================
 
 class VectorStore(Base):
-    """벡터스토어 테이블 (Hospital과 1:1 관계)"""
+    """벡터스토어 테이블 (Hospital과 N:1 관계 가능)"""
     __tablename__ = 'vector_store'
 
-    hid = Column(String(255), ForeignKey('hospital.hid', ondelete='CASCADE'), primary_key=True)
-    embed_text = Column(Text, comment="벡터를 만들기 위한 재료")
+    # DB에서 자동으로 생성되는 UUID를 PK로 인식하도록 추가
+    # insert 시 값을 보내지 않으므로 autoincrement와 유사하게 동작하도록 설정
+    uuid = Column(UUID(as_uuid=True), primary_key=True, server_default=func.uuid_generate_v4())
     
-    # pgvector (768차원)
+    # hid는 이제 PK가 아닌 일반 외래키 컬럼입니다.
+    hid = Column(String(255), ForeignKey('hospital.hid', ondelete='CASCADE'), nullable=False)
+    
+    embed_text = Column(Text, comment="벡터를 만들기 위한 재료")
     embed_vector = Column(Vector(768), comment="벡터")
 
     hospital = relationship("Hospital", back_populates="vector_store")
 
-    # 인덱스 설정 (HNSW)
     __table_args__ = (
         Index(
             'idx_vector_store_embedding',
