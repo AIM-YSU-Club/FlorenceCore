@@ -19,7 +19,7 @@ engine = create_engine(
     }    
 )
 with engine.connect() as conn:
-    conn.execute(text("SET maintenance_work_mem = '512MB';"))
+    conn.execute(text("SET maintenance_work_mem = '2048MB';"))
     conn.commit()
     print('DB 연결 성공')
 
