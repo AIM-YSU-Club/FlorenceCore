@@ -5,6 +5,7 @@ from db.client import PSQLClient
 from db.models import *
 from sqlalchemy import select
 from collections import defaultdict
+from uuid import uuid4
 
 dotenv.load_dotenv()
 
@@ -139,6 +140,7 @@ f"""
 
     for i, hid in enumerate(hids):
         es_new_row = VectorStore(
+            doc_id=uuid4(),
             hid=hid,
             embed_text=es_info_texts[i],
             embed_vector=es_info_vectors[i]
@@ -147,6 +149,7 @@ f"""
 
     for i, hid in enumerate([t[0] for t in ss_info_texts]):
         ss_new_row = VectorStore(
+            doc_id=uuid4(),
             hid=hid,
             embed_text=ss_info_texts[i][1],
             embed_vector=ss_info_vectors[i]
