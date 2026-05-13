@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from typing import List
 from langchain_community.vectorstores import FAISS
 from langchain_community.vectorstores.utils import DistanceStrategy
@@ -17,8 +18,9 @@ app = FastAPI(title="LangChain Embedding Service")
 
 # 설정값 클래스
 class Config():
-    EMBEDDING_MODEL="google/embeddinggemma-300m"
+    # EMBEDDING_MODEL="google/embeddinggemma-300m"
     ACCELERATION_DEVICE=os.getenv('ACCELERATION_DEVICE', 'cpu')
+    OLLAMA_EMBEDDING_MODEL=os.getenv('OLLAMA_EMBEDDING_MODEL')
     ENCODE_KWARGS={'normalize_embeddings': True}
     HF_TOKEN=os.getenv('HF_TOKEN')
 
@@ -52,14 +54,19 @@ class VectorSearchResqust(BaseModel):
 # FAISS 벡터DB 구축 클라이언트
 class FAISSClient():
     def __init__(self):
-        self.embeddings_model = HuggingFaceEmbeddings(
-            model_name=Config.EMBEDDING_MODEL,
-            encode_kwargs=Config.ENCODE_KWARGS,
-            model_kwargs={
-                'device': Config.ACCELERATION_DEVICE
-            }
+        # HuggingFace 임베딩. 지금은 안씀
+        # self.embeddings_model = HuggingFaceEmbeddings(
+        #     model_name=Config.EMBEDDING_MODEL,
+        #     encode_kwargs=Config.ENCODE_KWARGS,
+        #     model_kwargs={
+        #         'device': Config.ACCELERATION_DEVICE
+        #     }
+        # )
+        self.embedding_model = OllamaEmbeddings(
+            base_url=Config.OLLAMA_EMBEDDING_MODEL,
+
         )
-    
+
     def createVectorStore(self, documents: list[Document]):
         return FAISS.from_documents(
             documents, 
