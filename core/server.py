@@ -1,7 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
-from langchain_core.documents import Document
 import dotenv, os
 from huggingface_hub import login
 import torch
@@ -22,6 +21,7 @@ class Config():
     OLLAMA_EMBEDDING_MODEL=os.getenv('OLLAMA_EMBEDDING_MODEL')
     ENCODE_KWARGS={'normalize_embeddings': True}
     HF_TOKEN=os.getenv('HF_TOKEN')
+    SERVER_PORT=os.getenv('SERVER_PORT')
 
 # GPU 가속 가능 여부
 match Config.ACCELERATION_DEVICE:
@@ -74,4 +74,4 @@ async def search_test(req: TextRequest):
 # 서버 실행 (스크립트로 실행 시)
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=Config.SERVER_PORT)
