@@ -49,6 +49,8 @@ def generateVectorStore():
             h_em_joined = session.execute(stmt).all()
         except Exception as e:
             print(f'쿼리 실패: {e}')
+            return
+    print('Hospital-Equipment 조인 테이블 조회 성공')
 
     with client.getSession() as session:
         stmt = (
@@ -60,7 +62,9 @@ def generateVectorStore():
             h_sm_joined = session.execute(stmt).all()
         except Exception as e:
             print(f'쿼리 실패: {e}')
-            
+            return
+    print('Hospital-Subject 조인 테이블 조회 성공')
+
     with client.getSession() as session:
         stmt = (
             select(Hospital, SpecialSubjectMaster)
@@ -71,6 +75,8 @@ def generateVectorStore():
             h_ssm_joined = session.execute(stmt).all()
         except Exception as e:
             print(f'쿼리 실패: {e}')
+            return
+    print('Hospital-SpecialSubject 조인 테이블 조회 성공')
     
     h_info_dict = defaultdict(dict)
     for h, em in h_em_joined:
@@ -94,6 +100,12 @@ def generateVectorStore():
         if ssm:
             h_ssm_dict[h.hid].append(f'{ssm.name}: {ssm.comment}')
     
+
+    print(len(h_info_dict))
+    print(len(h_em_dict))
+    print(len(h_sm_dict))
+    print(len(h_ssm_dict))
+
     hids = h_info_dict.keys()
     es_info_texts = []
     ss_info_texts = []
@@ -108,15 +120,16 @@ f"""
         )
         specials = h_ssm_dict[hid]
         for s in specials:
-            ss_info_texts.append(
+            ss_info_texts.append((hid,
 f"""
 {h_info_dict[hid]['type']}으로 분류되는 의료기관인 {h_info_dict[hid]['name']}은 다음과 같은 특수 진료 과목을 운영한다.
 {s}
 """
             )
+            )
     em = EmbeddingManager()
     es_info_vectors = em.embed_texts(es_info_texts)
-    ss_info_vectors = em.embed_texts(ss_info_texts)
+    ss_info_vectors = em.embed_texts([t[1] for t in ss_info_texts])
     new_rows = []    
 
     for i, hid in enumerate(hids):
@@ -125,14 +138,16 @@ f"""
             embed_text=es_info_texts[i],
             embed_vector=es_info_vectors[i]
         )
+        new_rows.append(es_new_row)
+
+    for i, hid in enumerate([t[0] for t in ss_info_texts]):
         ss_new_row = VectorStore(
             hid=hid,
-            embed_text=ss_info_texts[i],
+            embed_text=ss_info_texts[i][1],
             embed_vector=ss_info_vectors[i]
         )
-
-        new_rows.append(es_new_row)
         new_rows.append(ss_new_row)
+
 
     with client.getSession() as session:
         try:
