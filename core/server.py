@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Query
+from pydantic import BaseModel, Field
 from typing import List
 import dotenv, os
 from huggingface_hub import login
@@ -53,6 +53,32 @@ class VectorSearchResqust(BaseModel):
     texts: List[str]
     query: str
 
+class PredictionResponse(BaseModel):
+    status: str = Field(
+        "success", 
+        description="API 요청 처리 상태 결과"
+    )
+    tm_4w: list[float] = Field(
+        ...,
+        description='지난 4주간(어제까지)의 주차별 평균 기온. 단위는 섭씨',
+        examples=["[14.4, 14.1, 15.1, 19.4]"]
+    )
+    hm_4w: list[float] = Field(
+        ...,
+        description='지난 4주간(어제까지)의 주차별 평균 습도. 단위는 %',
+        examples=["[52.2, 68.4, 59.0, 70.5]"]
+    )
+    rn_4w: list[float] = Field(
+        ...,
+        description='지난 4주간(어제까지)의 주차별 평균 강수량. 단위는 mm',
+        examples=["[0, 1.65, 0.57, 1.14]"]
+    )
+    predicted_value: float = Field(
+        ..., # 필수 값
+        description="AI 모델(XGBoost/LinearRegression)이 예측한 의약품 수요 총량 수치",
+        examples=[4068054.00] # Swagger UI에 노출될 샘플 값
+    )
+
 # API 엔드포인트 구현
 # root 엔드포인트 (서버 작동여부 확인용)
 @app.get("/")
@@ -60,18 +86,23 @@ def read_root():
     return {"message": "Hugging Face Embedding Service is running!"}
 
 # 향후 4주간의 의약품 수요 예측
-@app.get('/predict_next_4w')
-def predict_next_4w(target: str):
+@app.get(
+    '/predict_next_4w',
+    summary='의약품 수요 예측',
+    description='특정 분류군의 의약품에 대해 현재 날짜 기준 향후 4주간의 사용량',
+    response_model=PredictionResponse
+)
+def predict_next_4w(target: str = Query(..., description='ATC 분류 코드', example='N02AA')):
     model = Model(f'{target}.csv')
 
     wm = WeatherDataManager()
     ta, hm, rn = wm.getLast4w()
-    predict_value = model.predict(ta, hm, rn)
+    predicted_value = model.predict(ta, hm, rn)
     return {
         'ta_4w': ta,
         'hm_4w': hm,
         'rn_4w': rn,
-        'predict_result': float(predict_value[0])
+        'predict_res': float(predicted_value[0])
     }
 
     pass
