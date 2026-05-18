@@ -40,8 +40,11 @@ class Model():
             '실제 수치 (Actual)': Y,
             'AI 예측 수치 (Predicted)': predicted_value
         })
-        print(result_df.head(10)) 
-    
-    def predict(self, ta_4w: list[float], hm_4w: list[float], rn_4w: list[float]):
-        return self.model.predict([ta_4w + hm_4w + rn_4w])
+        print(result_df.head(10))
+
+    def getDrugCountMean(self) -> float:
+        return self.drug_df['value'].mean()
+        
+    def predict(self, ta_4w: list[float], hm_4w: list[float], rn_4w: list[float]) -> float:
+        return float(self.model.predict([ta_4w + hm_4w + rn_4w])[0])
 
