@@ -75,8 +75,18 @@ class PredictionResponse(BaseModel):
     )
     predicted_value: float = Field(
         ..., # 필수 값
-        description="AI 모델(XGBoost/LinearRegression)이 예측한 의약품 수요 총량 수치",
+        description="해당 ATC코드 분류군의 의약품에 대해 모델이 예측한 다음 4주간의 사용량 수치",
         examples=[4068054.00] # Swagger UI에 노출될 샘플 값
+    )
+    mean_value: float = Field(
+        ...,
+        description='해당 ATC코드 분류군의 의약품에 대한 3년간(23-25)의 평균 사용량',
+        examples=[3862045.43]
+    )
+    growth_rate: float = Field(
+        ...,
+        description='predicted_value에 대해 평균 대비 증감률',
+        examples=[-23.1, 34.7]
     )
 
 # API 엔드포인트 구현
@@ -97,12 +107,23 @@ def predict_next_4w(target: str = Query(..., description='ATC 분류 코드', ex
 
     wm = WeatherDataManager()
     ta, hm, rn = wm.getLast4w()
+
+    # 예측치
     predicted_value = model.predict(ta, hm, rn)
+
+    # 3년간의 월 사용량 평균
+    drug_count_mean = model.getDrugCountMean()
+
+    # 평균 대비 증감 비율
+    growth_rate = (predicted_value / drug_count_mean - 1) * 100
+    
     return {
         'ta_4w': ta,
         'hm_4w': hm,
         'rn_4w': rn,
-        'predicted_value': float(predicted_value[0])
+        'predicted_value': predicted_value,
+        'mean_value': drug_count_mean,
+        'growth_rate': growth_rate
     }
 
     pass
