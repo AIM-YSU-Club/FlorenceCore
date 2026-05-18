@@ -58,7 +58,7 @@ class PredictionResponse(BaseModel):
         "success", 
         description="API 요청 처리 상태 결과"
     )
-    tm_4w: list[float] = Field(
+    ta_4w: list[float] = Field(
         ...,
         description='지난 4주간(어제까지)의 주차별 평균 기온. 단위는 섭씨',
         examples=["[14.4, 14.1, 15.1, 19.4]"]
@@ -102,7 +102,7 @@ def predict_next_4w(target: str = Query(..., description='ATC 분류 코드', ex
         'ta_4w': ta,
         'hm_4w': hm,
         'rn_4w': rn,
-        'predict_res': float(predicted_value[0])
+        'predicted_value': float(predicted_value[0])
     }
 
     pass
