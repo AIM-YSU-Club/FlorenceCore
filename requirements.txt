@@ -3,6 +3,8 @@ python-dotenv
 # Data Parsing
 pandas
 requests
+# Learning
+scikit-learn
 # PGVector
 pgvector
 psycopg2-binary
