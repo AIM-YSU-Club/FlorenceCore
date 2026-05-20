@@ -1,17 +1,10 @@
-R05CA	Expectorants	
-R05CB	Mucolytics	
-R05DA	Opium alkaloids and derivatives	
-R05DB	Other cough suppressants	
-R05FA	Opium derivatives and expectorants	
-R06AB	Substituted alkylamines	
-R06AE	Piperazine derivatives	
-R06AX	Other antihistamines for systemic use
-R01AD	Corticosteroids	
-R01BA	Sympathomimetics
-N02AA	Natural opium alkaloids	
-N02AB	Phenylpiperidine derivatives	
-N02AJ	Opioids in combination with non-opioid analgesics	
-N02AX	Other opioids	
-N02BE	Anilides	
-N02BF	Gabapentinoids	
-N02CC	Selective serotonin (5HT1) agonists	
+N02AJ - -
+N02BE - -
+R01BA - -
+R05CA - -
+R05CB - -
+R05DB - -
+R05FA - -
+R06AB - -
+R06AE - -
+R06AX - -
