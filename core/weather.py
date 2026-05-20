@@ -3,15 +3,17 @@ import pandas as pd
 import numpy as np
 import dotenv, os
 from datetime import datetime, timedelta, timezone
-
+from pandas import DataFrame
+import calendar
 
 dotenv.load_dotenv()
-
+ 
 class Config():
     KMA_API_KEY=os.getenv('KMA_API_KEY')
-    KMA_BASE_URL='https://apihub.kma.go.kr/api/typ01/url/kma_sfcdd3.php'
-    KMA_STN=112 # 인천 관측지점
-    RESPONSE_DATA_COLUMNS=[
+    
+    KMA_WETATHER_URL = 'https://apihub.kma.go.kr/api/typ01/url/kma_sfcdd3.php'
+    KMA_WEATHER_STN = 112 # 인천 관측지점 (날씨)
+    WEATHER_RESPONSE_COLUMNS=[
         "TM", "STN", "WS_AVG", "WR_DAY", "WD_MAX", "WS_MAX", "WS_MAX_TM", "WD_INS", "WS_INS", "WS_INS_TM",
         "TA_AVG", "TA_MAX", "TA_MAX_TM", "TA_MIN", "TA_MIN_TM", "TD_AVG", "TS_AVG", "TG_MIN", "HM_AVG", "HM_MIN",
         "HM_MIN_TM", "PV_AVG", "EV_S", "EV_L", "FG_DUR", "PA_AVG", "PS_AVG", "PS_MAX", "PS_MAX_TM", "PS_MIN",
@@ -19,24 +21,29 @@ class Config():
         "RN_DUR", "RN_60M_MAX", "RN_60M_MAX_TM", "RN_10M_MAX", "RN_10M_MAX_TM", "RN_POW_MAX", "RN_POW_MAX_TM", "SD_NEW", "SD_NEW_TM", "SD_MAX",
         "SD_MAX_TM", "TE_05", "TE_10", "TE_15", "TE_30", "TE_50"
     ]
-    KMA_NA_VALUES=[-9.0, -9, -99.0, -99, "-9.0", "-99.0"]
+    WEATHER_NA_VALUES=[-9.0, -9, -99.0, -99, "-9.0", "-99.0"]
+
+    KMA_PM10_URL = 'https://apihub.kma.go.kr/api/typ01/url/dst_pm10_hr.php'
+    KMA_PM10_STNS = [102, 201, 229]
+
+    PM10_RESPONSE_COLUMNS=['TM', 'ORG', 'STN', 'AVG', 'MIN', 'MAX', 'CNT']
 
 class WeatherDataManager():
     def __init__(self):
+        self.KST = timezone(timedelta(hours=9))
         pass
 
     def getLast4w(self) -> tuple[list, list, list]:
-        KST = timezone(timedelta(hours=9))
-        kst_now = datetime.now(KST)
+        kst_now = datetime.now(self.KST)
         tm1 = kst_now - timedelta(days=28)
         tm2 = kst_now - timedelta(days=1)
 
         response = requests.get(
-            url=Config.KMA_BASE_URL, 
+            url=Config.KMA_WETATHER_URL, 
             params={
                 'tm1': tm1.strftime('%Y%m%d'),
                 'tm2': tm2.strftime('%Y%m%d'),
-                'stn': str(Config.KMA_STN),
+                'stn': str(Config.KMA_WEATHER_STN),
                 'authKey': Config.KMA_API_KEY
             }
         )
@@ -48,9 +55,9 @@ class WeatherDataManager():
             io.StringIO(response.text),
             sep=r'\s+',
             comment='#',
-            names=Config.RESPONSE_DATA_COLUMNS,
+            names=Config.WEATHER_RESPONSE_COLUMNS,
             dtype={'TM': str, 'STN': str},
-            na_values=Config.KMA_NA_VALUES,
+            na_values=Config.WEATHER_NA_VALUES,
             engine='python'
         )
 
@@ -70,4 +77,4 @@ class WeatherDataManager():
         return (ta_avgs, hm_avgs, rn_avgs)
 
 wm = WeatherDataManager()
-wm.getLast4w()
+# wm.getLast4w()
