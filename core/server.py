@@ -1,15 +1,11 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException, status
 from pydantic import BaseModel, Field
-from typing import List
 import dotenv, os
-from huggingface_hub import login
-import torch
-from db.client import PSQLClient
-from db.models import *
-from core.embedding import EmbeddingManager
+from pathlib import Path
 
+from db.models import *
 from core.weather import WeatherDataManager
-from core.learning import Model
+from core.learning import Model, NoDatasetError
 
 dotenv.load_dotenv()
 
@@ -19,39 +15,8 @@ app = FastAPI(title="Florence")
 
 # 설정값 클래스
 class Config():
-    # EMBEDDING_MODEL="google/embeddinggemma-300m"
-    # ACCELERATION_DEVICE=os.getenv('ACCELERATION_DEVICE', 'cpu')
-    # OLLAMA_EMBEDDING_MODEL=os.getenv('OLLAMA_EMBEDDING_MODEL')
-    # ENCODE_KWARGS={'normalize_embeddings': True}
-    # HF_TOKEN=os.getenv('HF_TOKEN')
     SERVER_PORT=int(os.getenv('SERVER_PORT'))
-
-# # GPU 가속 가능 여부
-# match Config.ACCELERATION_DEVICE:
-#     case 'mps':
-#         if torch.backends.mps.is_available():
-#             print('Apple Sillicon GPU 가속 준비됨.')
-#         else:
-#             print('Apple Sillicon GPU 가속 불가. CPU 사용.')
-#     case 'cuda':
-#         if torch.cuda.is_available():
-#             print('NVIDIA GPU 가속 준비됨.')
-#         else:
-#             print('NVIDIA GPU GPU 가속 불가. CPU 사용.')
-
-# # HuggingFace 로그인(embeddinggemma 모델 접근용)
-# login(token=Config.HF_TOKEN)
-
-# API가 받을 요청에 대한 타입을 정의
-class TextRequest(BaseModel):
-    text: str
-
-class BatchTextRequest(BaseModel):
-    texts: List[str]
-
-class VectorSearchResqust(BaseModel):
-    texts: List[str]
-    query: str
+    DATASET_PATH=os.getenv('DATASET_PATH')
 
 class PredictionResponse(BaseModel):
     status: str = Field(
@@ -65,13 +30,18 @@ class PredictionResponse(BaseModel):
     )
     hm_4w: list[float] = Field(
         ...,
-        description='지난 4주간(어제까지)의 주차별 평균 습도. 단위는 %',
+        description='지난 4주간(어제까지)의 주차별 평균 상대습도. 단위는 %',
         examples=["[52.2, 68.4, 59.0, 70.5]"]
     )
     rn_4w: list[float] = Field(
         ...,
         description='지난 4주간(어제까지)의 주차별 평균 강수량. 단위는 mm',
         examples=["[0, 1.65, 0.57, 1.14]"]
+    )
+    pm_4w: list[float] = Field(
+        ...,
+        description='지난 4주간(어제까지)의 주차별 평균 미세먼지 농도. 단위는 ug/㎥',
+        examples=["[39.86, 32.21, 19.24, 19.8]"]
     )
     predicted_value: float = Field(
         ..., # 필수 값
@@ -102,31 +72,48 @@ def read_root():
     description='특정 분류군의 의약품에 대해 현재 날짜 기준 향후 4주간의 사용량',
     response_model=PredictionResponse
 )
-def predict_next_4w(target: str = Query(..., description='ATC 분류 코드', example='N02AA')):
-    model = Model(f'{target}.csv')
+def predict_next_4w(target: str = Query(..., description='ATC 분류 코드', example='N02BE')):
+    try:
+        model = Model(target)
 
-    wm = WeatherDataManager()
-    ta, hm, rn = wm.getLast4w()
+        wm = WeatherDataManager()
+        ta, hm, rn, pm = wm.getLast4w()
 
-    # 예측치
-    predicted_value = model.predict(ta, hm, rn)
+        # 예측치
+        predicted_value = model.predict(ta, hm, rn, pm)
 
-    # 3년간의 월 사용량 평균
-    drug_count_mean = model.getDrugCountMean()
+        # 3년간의 월 사용량 평균
+        drug_count_mean = model.getDrugCountMean()
 
-    # 평균 대비 증감 비율
-    growth_rate = (predicted_value / drug_count_mean - 1) * 100
+        # 평균 대비 증감 비율
+        growth_rate = (predicted_value / drug_count_mean - 1) * 100
+        
+        return {
+            'ta_4w': ta,
+            'hm_4w': hm,
+            'rn_4w': rn,
+            'pm_4w': pm,
+            'predicted_value': predicted_value,
+            'mean_value': drug_count_mean,
+            'growth_rate': growth_rate
+        }
     
-    return {
-        'ta_4w': ta,
-        'hm_4w': hm,
-        'rn_4w': rn,
-        'predicted_value': predicted_value,
-        'mean_value': drug_count_mean,
-        'growth_rate': growth_rate
-    }
+    except NoDatasetError:
+        drug_dataset_path = Path(f'{Config.DATASET_PATH}/drug')
+        dataset_files = [file.name.split('.')[0] for file in drug_dataset_path.glob('*.csv')]
 
-    pass
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'ATC코드 {target}에 대한 의약품 사용량 데이터셋이 존재하지 않습니다. 선택 가능한 ATC코드는 {dataset_files} 입니다.'
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f'기타 서버 오류: {e}'
+        )
+
+
 # 서버 실행 (스크립트로 실행 시)
 if __name__ == "__main__":
     import uvicorn

@@ -11,8 +11,15 @@ class Config():
     DATASET_PATH=os.getenv('DATASET_PATH')
     PRETRAINED_PATH=os.getenv('PRETRAINED_PATH')
 
+class NoDatasetError(Exception):
+    pass
+
 class Model():
     def __init__(self, target_drug_dataset: str):
+        csv_file_path = Path(f'{Config.DATASET_PATH}/drug/{target_drug_dataset}.csv')
+        if not csv_file_path.is_file():
+            raise NoDatasetError()
+
         self.df_ta = pd.read_csv(f'{Config.DATASET_PATH}/kma/temperature.csv').add_prefix('ta_')
         self.df_hm = pd.read_csv(f'{Config.DATASET_PATH}/kma/humidity.csv').add_prefix('hm_')
         self.df_rn = pd.read_csv(f'{Config.DATASET_PATH}/kma/rainfall.csv').add_prefix('rn_')
