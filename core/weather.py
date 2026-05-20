@@ -33,12 +33,15 @@ class WeatherDataManager():
         self.KST = timezone(timedelta(hours=9))
         pass
 
-    def getLast4w(self) -> tuple[list, list, list]:
+    def getLast4w(self) -> tuple[list, list, list, list]:
         kst_now = datetime.now(self.KST)
         tm1 = kst_now - timedelta(days=28)
         tm2 = kst_now - timedelta(days=1)
 
-        response = requests.get(
+        print('날씨 API 호출 중...')
+
+        # 날씨(기온, 습도, 강수랭) API
+        weather_response = requests.get(
             url=Config.KMA_WETATHER_URL, 
             params={
                 'tm1': tm1.strftime('%Y%m%d'),
@@ -48,11 +51,28 @@ class WeatherDataManager():
             }
         )
 
-        if not response.ok:
-            print(f'API 호출 실패: {response.status_code}, {response.reason}')
+        if not weather_response.ok:
+            print(f'API 호출 실패: {weather_response.status_code}, {weather_response.reason}')
         
-        df = pd.read_csv(
-            io.StringIO(response.text),
+        # 미세먼지(PM10) API
+        print('미세먼지 API 호출 중...')
+
+        pm10_response = requests.get(
+            url=Config.KMA_PM10_URL,
+            params={
+                'tm_st': f'{tm1.strftime('%Y%m%d')}00',
+                'tm': f'{tm2.strftime('%Y%m%d')}23',
+                'stn': Config.KMA_PM10_STNS[0],
+                'authKey': Config.KMA_API_KEY,
+                'data': 1
+            }
+        )
+
+        if not pm10_response.ok:
+            print(f'API 호출 실패: {pm10_response.status_code}, {pm10_response.reason}')
+
+        weather_df = pd.read_csv(
+            io.StringIO(weather_response.text),
             sep=r'\s+',
             comment='#',
             names=Config.WEATHER_RESPONSE_COLUMNS,
@@ -61,7 +81,7 @@ class WeatherDataManager():
             engine='python'
         )
 
-        ta_hm_rn_df = df[['TA_AVG', 'HM_AVG', 'RN_DAY']].fillna(0)
+        ta_hm_rn_df = weather_df[['TA_AVG', 'HM_AVG', 'RN_DAY']].fillna(0)
 
         ta_avgs = []
         hm_avgs = []
@@ -70,11 +90,39 @@ class WeatherDataManager():
         weekly_df = ta_hm_rn_df.groupby(ta_hm_rn_df.index // 7).mean()
 
         for index, row in weekly_df.iterrows():
-            ta_avgs.append(row.loc['TA_AVG'])
-            hm_avgs.append(row.loc['HM_AVG'])
-            rn_avgs.append(row.loc['RN_DAY'])
+            ta_avgs.append(round(float(row.loc['TA_AVG']), 2))
+            hm_avgs.append(round(float(row.loc['HM_AVG']), 2))
+            rn_avgs.append(round(float(row.loc['RN_DAY']), 2))
 
-        return (ta_avgs, hm_avgs, rn_avgs)
+        pm_avgs = []
 
-wm = WeatherDataManager()
-# wm.getLast4w()
+        pm10_df = pd.read_csv(
+            io.StringIO(pm10_response.text),
+            sep=r'\s+',
+            comment='#',
+            names=Config.PM10_RESPONSE_COLUMNS,
+            dtype={'TM': str, 'STN': str, 'AVG': str},
+            engine='python'
+        )
+
+        pm10_df['AVG'] = pd.to_numeric(pm10_df['AVG'].str.split('(').str[0], errors='coerce').astype('Int64')
+        pm10_df = pm10_df[['TM', 'AVG']]
+
+        pm10_df['TM'] = pd.to_datetime(pm10_df['TM'], format='%Y.%m.%d.%H:%M', errors='coerce')
+        pm10_df.set_index('TM', inplace=True)
+
+        today = datetime.now().date()
+        start_date = pd.Timestamp(today - timedelta(days=28))
+        end_date = pd.Timestamp(today - timedelta(days=1)) + pd.Timedelta(hours=23)
+
+        filtered_df = pm10_df.loc[start_date:end_date]
+        pm_avgs = filtered_df['AVG'].resample('7D').mean().round(2).to_list()
+
+        return (ta_avgs, hm_avgs, rn_avgs, pm_avgs)
+
+# wm = WeatherDataManager()
+# result = wm.getLast4w()
+# print(result[0])
+# print(result[1])
+# print(result[2])
+# print(result[3])
