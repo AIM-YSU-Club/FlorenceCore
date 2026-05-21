@@ -4,8 +4,8 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -153.5857,
-    "scrollLeft": -126,
+    "scrollTop": -112.5853,
+    "scrollLeft": -136,
     "zoomLevel": 1,
     "show": 431,
     "database": 4,
@@ -38,7 +38,8 @@
     ],
     "relationshipIds": [
       "z0nGkXbHDVP3iNd-AWT6y",
-      "XbHInImoDLwYxQwoy1QUr"
+      "XbHInImoDLwYxQwoy1QUr",
+      "32T6y_innFBHcX6sOddOr"
     ],
     "indexIds": [],
     "memoIds": []
@@ -328,20 +329,32 @@
       },
       "2Tav8wtAE3Ln6o3vSfvDI": {
         "id": "2Tav8wtAE3Ln6o3vSfvDI",
-        "name": "Sale",
-        "comment": "",
-        "columnIds": [],
-        "seqColumnIds": [],
+        "name": "WeeklySales",
+        "comment": "주차 별 판매량",
+        "columnIds": [
+          "NCALk922DZeIj9Mm2ILRO",
+          "3kDBdOYGRQnQW0mns1fqj",
+          "KGRB-bbolyvDKLnMC7VLr",
+          "vJXQLRThK92NatV7pwZc1",
+          "2FXGCbpJ9Y-sKWqB5fqAL"
+        ],
+        "seqColumnIds": [
+          "NCALk922DZeIj9Mm2ILRO",
+          "3kDBdOYGRQnQW0mns1fqj",
+          "KGRB-bbolyvDKLnMC7VLr",
+          "vJXQLRThK92NatV7pwZc1",
+          "2FXGCbpJ9Y-sKWqB5fqAL"
+        ],
         "ui": {
-          "x": 324,
-          "y": 534.5857,
+          "x": 247,
+          "y": 522.5857,
           "zIndex": 170,
-          "widthName": 60,
-          "widthComment": 60,
+          "widthName": 73,
+          "widthComment": 71,
           "color": ""
         },
         "meta": {
-          "updateAt": 1779341194784,
+          "updateAt": 1779341378782,
           "createAt": 1779341174580
         }
       }
@@ -374,7 +387,7 @@
         "comment": "약국명",
         "dataType": "VARCHAR",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -383,7 +396,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1779340532284,
+          "updateAt": 1779341373167,
           "createAt": 1778378956678
         }
       },
@@ -1054,7 +1067,7 @@
         "comment": "도로명주소",
         "dataType": "VARCHAR",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -1063,7 +1076,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1779340611695,
+          "updateAt": 1779341402124,
           "createAt": 1779340601190
         }
       },
@@ -1225,6 +1238,106 @@
         "meta": {
           "updateAt": 1779341161406,
           "createAt": 1779341137720
+        }
+      },
+      "NCALk922DZeIj9Mm2ILRO": {
+        "id": "NCALk922DZeIj9Mm2ILRO",
+        "tableId": "2Tav8wtAE3Ln6o3vSfvDI",
+        "name": "sale_id",
+        "comment": "",
+        "dataType": "UUID",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1779341280860,
+          "createAt": 1779341231026
+        }
+      },
+      "3kDBdOYGRQnQW0mns1fqj": {
+        "id": "3kDBdOYGRQnQW0mns1fqj",
+        "tableId": "2Tav8wtAE3Ln6o3vSfvDI",
+        "name": "medicine_id",
+        "comment": "의약품 ID",
+        "dataType": "UUID",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 70,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1779341288544,
+          "createAt": 1779341288544
+        }
+      },
+      "KGRB-bbolyvDKLnMC7VLr": {
+        "id": "KGRB-bbolyvDKLnMC7VLr",
+        "tableId": "2Tav8wtAE3Ln6o3vSfvDI",
+        "name": "year",
+        "comment": "연도",
+        "dataType": "YEAR",
+        "default": "2026",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1779341358080,
+          "createAt": 1779341298045
+        }
+      },
+      "vJXQLRThK92NatV7pwZc1": {
+        "id": "vJXQLRThK92NatV7pwZc1",
+        "tableId": "2Tav8wtAE3Ln6o3vSfvDI",
+        "name": "week",
+        "comment": "주차(1~52)",
+        "dataType": "INT",
+        "default": "1",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1779341354472,
+          "createAt": 1779341311570
+        }
+      },
+      "2FXGCbpJ9Y-sKWqB5fqAL": {
+        "id": "2FXGCbpJ9Y-sKWqB5fqAL",
+        "tableId": "2Tav8wtAE3Ln6o3vSfvDI",
+        "name": "sales",
+        "comment": "판매량",
+        "dataType": "INT",
+        "default": "0",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1779341352129,
+          "createAt": 1779341333439
         }
       }
     },
@@ -1479,6 +1592,34 @@
         "meta": {
           "updateAt": 1779340987029,
           "createAt": 1779340987029
+        }
+      },
+      "32T6y_innFBHcX6sOddOr": {
+        "id": "32T6y_innFBHcX6sOddOr",
+        "identification": false,
+        "relationshipType": 4,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "DsMLAIDcalAO-3glVM3IP",
+          "columnIds": [
+            "-cPyoyllzgaCVSAp3X1pI"
+          ],
+          "x": 782.9642,
+          "y": 605.5857,
+          "direction": 1
+        },
+        "end": {
+          "tableId": "2Tav8wtAE3Ln6o3vSfvDI",
+          "columnIds": [
+            "3kDBdOYGRQnQW0mns1fqj"
+          ],
+          "x": 622,
+          "y": 610.5857,
+          "direction": 2
+        },
+        "meta": {
+          "updateAt": 1779341288544,
+          "createAt": 1779341288544
         }
       }
     },
