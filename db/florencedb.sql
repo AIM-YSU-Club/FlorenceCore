@@ -1,95 +1,77 @@
--- 1. 확장 기능 추가
-CREATE EXTENSION IF NOT EXISTS postgis;
-CREATE EXTENSION IF NOT EXISTS vector;
+-- 0. UUID 자동 생성을 위한 확장 모듈 활성화 (선택 사항이지만 권장)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- ==========================================
--- [ 마스터 테이블 생성 ]
--- 외래 키 참조를 위해 병원/매핑 테이블보다 먼저 생성해야 합니다.
--- ==========================================
-
--- 의료장비 마스터 테이블
-CREATE TABLE EquipmentMaster (
-    code VARCHAR(255) PRIMARY KEY,     -- 장비 코드
-    name VARCHAR(255)                  -- 장비명
+-- 1. User (유저) 테이블 생성
+CREATE TABLE "User" (
+    "user_id"     UUID          NOT NULL DEFAULT uuid_generate_v4(),
+    "email"       TEXT          NOT NULL,
+    "hashed_pass" TEXT          NOT NULL,
+    
+    CONSTRAINT "PK_User" PRIMARY KEY ("user_id")
 );
 
--- 진료과목 마스터 테이블
-CREATE TABLE SubjectMaster (
-    code VARCHAR(255) PRIMARY KEY,     -- 과목 코드
-    name VARCHAR(255)                  -- 과목명
+-- 2. Pharmacy (약국) 테이블 생성
+CREATE TABLE "Pharmacy" (
+    "pharmacy_id" UUID          NOT NULL DEFAULT uuid_generate_v4(),
+    "user_id"     UUID          NOT NULL,
+    "name"        VARCHAR(255)  NOT NULL,
+    "address"     VARCHAR(255)  NOT NULL,
+    
+    CONSTRAINT "PK_Pharmacy" PRIMARY KEY ("pharmacy_id"),
+    CONSTRAINT "FK_Pharmacy_User" FOREIGN KEY ("user_id") 
+        REFERENCES "User" ("user_id") ON DELETE CASCADE
 );
 
--- 특수진료과목 마스터 테이블
-CREATE TABLE SpecialSubjectMaster (
-    code VARCHAR(255) PRIMARY KEY,     -- 과목 코드
-    name VARCHAR(255)                  -- 과목명
+-- 3. Medicine (의약품) 테이블 생성
+CREATE TABLE "Medicine" (
+    "medicine_id" UUID          NOT NULL DEFAULT uuid_generate_v4(),
+    "pharmacy_id" UUID          NOT NULL,
+    "name"        VARCHAR(255)  NOT NULL,
+    "atc4"        VARCHAR(255)  NULL,
+    
+    CONSTRAINT "PK_Medicine" PRIMARY KEY ("medicine_id"),
+    CONSTRAINT "FK_Medicine_Pharmacy" FOREIGN KEY ("pharmacy_id") 
+        REFERENCES "Pharmacy" ("pharmacy_id") ON DELETE CASCADE
 );
 
-
--- ==========================================
--- [ 메인 테이블 생성 ]
--- ==========================================
-
--- 병원 목록 테이블
-CREATE TABLE Hospital (
-    hid VARCHAR(255) PRIMARY KEY,      -- 암호화된 요양기호
-    type VARCHAR(100),                 -- 병원종류
-    name VARCHAR(255),                 -- 병원명
-    state VARCHAR(100),                -- 시도명
-    city VARCHAR(100),                 -- 시군구명
-    address TEXT,                      -- 도로명주소
-    startdate DATE,                    -- 개설일자
-    coordinate GEOMETRY(Point, 4326)   -- 위도경도 (WGS84 좌표계)
+-- 4. WeeklySales (주차 별 판매량) 테이블 생성
+CREATE TABLE "WeeklySales" (
+    "sale_id"     UUID          NOT NULL DEFAULT uuid_generate_v4(),
+    "medicine_id" UUID          NOT NULL,
+    "year"        SMALLINT      NOT NULL DEFAULT 2026,
+    "week"        INT           NOT NULL DEFAULT 1,
+    "sales"       INT           NOT NULL DEFAULT 0,
+    
+    CONSTRAINT "PK_WeeklySales" PRIMARY KEY ("sale_id"),
+    CONSTRAINT "FK_WeeklySales_Medicine" FOREIGN KEY ("medicine_id") 
+        REFERENCES "Medicine" ("medicine_id") ON DELETE CASCADE,
+        
+    -- 데이터 무결성을 위한 제약조건 (선택 항목)
+    CONSTRAINT "CH_WeeklySales_week" CHECK ("week" BETWEEN 1 AND 52),
+    CONSTRAINT "CH_WeeklySales_sales" CHECK ("sales" >= 0)
 );
 
--- 거리 계산 성능 향상을 위한 공간 인덱스
-CREATE INDEX idx_hospital_coordinate ON Hospital USING GIST (coordinate);
+-- 코멘트(Comment) 추가 (ERD 설명 반영)
+COMMENT ON TABLE "User" IS '유저';
+COMMENT ON COLUMN "User"."user_id" IS '유저 ID';
+COMMENT ON COLUMN "User"."email" IS '이메일(로그인 ID)';
+COMMENT ON COLUMN "User"."hashed_pass" IS '해시된 비밀번호';
 
+COMMENT ON TABLE "Pharmacy" IS '약국';
+COMMENT ON COLUMN "Pharmacy"."pharmacy_id" IS '약국 ID';
+COMMENT ON COLUMN "Pharmacy"."user_id" IS '유저 ID';
+COMMENT ON COLUMN "Pharmacy"."name" IS '약국명';
+COMMENT ON COLUMN "Pharmacy"."address" IS '도로명주소';
 
--- ==========================================
--- [ 매핑(N:M) 테이블 생성 ]
--- ==========================================
+COMMENT ON TABLE "Medicine" IS '의약품';
+COMMENT ON COLUMN "Medicine"."medicine_id" IS '의약품 ID';
+COMMENT ON COLUMN "Medicine"."pharmacy_id" IS '약국 ID';
+COMMENT ON COLUMN "Medicine"."name" IS '약품명';
+COMMENT ON COLUMN "Medicine"."atc4" IS 'ATC 4단계 분류코드';
 
--- 병원 - 의료장비 매핑 테이블
-CREATE TABLE HospitalEquipment (
-    hid VARCHAR(255) NOT NULL,
-    code VARCHAR(255) NOT NULL,
-    PRIMARY KEY (hid, code),           -- 복합 기본키 설정
-    CONSTRAINT fk_he_hospital FOREIGN KEY (hid) REFERENCES Hospital(hid) ON DELETE CASCADE,
-    CONSTRAINT fk_he_equipment FOREIGN KEY (code) REFERENCES EquipmentMaster(code) ON DELETE CASCADE
-);
-
--- 병원 - 진료과목 매핑 테이블
-CREATE TABLE HospitalSubject (
-    hid VARCHAR(255) NOT NULL,
-    code VARCHAR(255) NOT NULL,
-    PRIMARY KEY (hid, code),
-    CONSTRAINT fk_hs_hospital FOREIGN KEY (hid) REFERENCES Hospital(hid) ON DELETE CASCADE,
-    CONSTRAINT fk_hs_subject FOREIGN KEY (code) REFERENCES SubjectMaster(code) ON DELETE CASCADE
-);
-
--- 병원 - 특수진료과목 매핑 테이블
-CREATE TABLE HospitalSpecialSubject (
-    hid VARCHAR(255) NOT NULL,
-    code VARCHAR(255) NOT NULL,
-    PRIMARY KEY (hid, code),
-    CONSTRAINT fk_hss_hospital FOREIGN KEY (hid) REFERENCES Hospital(hid) ON DELETE CASCADE,
-    CONSTRAINT fk_hss_special FOREIGN KEY (code) REFERENCES SpecialSubjectMaster(code) ON DELETE CASCADE
-);
-
-
--- ==========================================
--- [ 벡터 스토어 테이블 생성 ]
--- ==========================================
-
--- 벡터스토어 테이블 (Hospital과 1:1 관계)
-CREATE TABLE VectorStore (
-    hid VARCHAR(255) PRIMARY KEY,      -- 암호화된 요양기호
-    embed_text TEXT,                   -- 벡터를 만들기 위한 재료
-    embed_vector VECTOR(768),          -- 벡터 (기존 설정 유지)
-    CONSTRAINT fk_vector_hospital FOREIGN KEY (hid) REFERENCES Hospital(hid) ON DELETE CASCADE
-);
-
--- 벡터 검색 성능 향상을 위한 인덱스
-CREATE INDEX idx_vector_store_embedding ON VectorStore USING hnsw (embed_vector vector_cosine_ops);
-
+COMMENT ON TABLE "WeeklySales" IS '주차 별 판매량';
+COMMENT ON COLUMN "WeeklySales"."sale_id" IS '판매 ID';
+COMMENT ON COLUMN "WeeklySales"."medicine_id" IS '의약품 ID';
+COMMENT ON COLUMN "WeeklySales"."year" IS '연도';
+COMMENT ON COLUMN "WeeklySales"."week" IS '주차(1~52)';
+COMMENT ON COLUMN "WeeklySales"."sales" IS '판매량';
