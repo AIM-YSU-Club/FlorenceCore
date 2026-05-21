@@ -26,5 +26,5 @@ torch
 fastapi
 uvicorn
 # auth
-"passlib[bcrypt]"
+"pwdlib[argon2]"
 PyJWT
