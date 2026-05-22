@@ -26,5 +26,5 @@ torch
 fastapi
 uvicorn
 # auth
-"pwdlib[argon2]"
+pwdlib[argon2]
 PyJWT
