@@ -25,6 +25,7 @@ torch
 # API
 fastapi
 uvicorn
+python-multipart
 # auth
 pydantic[email]
 pwdlib[argon2]
