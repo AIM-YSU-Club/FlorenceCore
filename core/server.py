@@ -141,7 +141,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
             if not user:
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="해당 emailwnthfh 가입된 정보가 없습니다."
+                    detail="해당 이메일로 가입된 유저 정보가 없습니다."
                 )
             verified = verify_password(form_data.password, user.hashed_pass)
             if not verified:
@@ -160,8 +160,41 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
             detail=f"DB 관련 오류: {se}"
         )
 
+
+@app.delete(
+    "/unregister", 
+    status_code=200,
+    summary='회원 탈퇴 API'
+)
+def unregister(current_user_email: str = Depends(get_current_user)):
+    """회원 탈퇴 API (인증된 유저 정보 및 연관 데이터 연쇄 삭제)"""
+    try:
+        client = PSQLClient()
+        with client.getSession() as session:
+            stmt = select(User).where(User.email == current_user_email)
+            user = session.scalar(stmt)
+
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, 
+                    detail="해당 이메일로 가입된 유저 정보가 없습니다."
+                )
+            
+            session.delete(user)
+            session.commit()
+
+    except SQLAlchemyError as se:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"DB 관련 오류: {se}"
+        )
+    
+    return {"message": "회원 탈퇴가 성공적으로 완료되었습니다."}
+
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # predict_next_4w
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 # API 반환 타입
