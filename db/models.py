@@ -1,6 +1,6 @@
 import uuid
 from typing import List, Optional
-from sqlalchemy import ForeignKey, String, Integer, SmallInteger, Text
+from sqlalchemy import ForeignKey, String, Integer, SmallInteger, Text, Boolean
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 # 1. SQLAlchemy Base 클래스 선언
@@ -18,17 +18,21 @@ class User(Base):
     email: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     hashed_pass: Mapped[str] = mapped_column(Text, nullable=False)
     
-    # 관계 설정 (일대다: 유저는 여러 약국을 가질 수 있음)
-    pharmacies: Mapped[List["Pharmacy"]] = relationship(
+    # 약국 정보 추가 (Embedded)
+    pharmacy_name: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    pharmacy_address: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    
+    # 관계 설정 (일대다: 유저는 여러 의약품을 직접 가질 수 있음)
+    medicines: Mapped[List["Medicine"]] = relationship(
         back_populates="user", 
         cascade="all, delete-orphan"
     )
 
-# 3. Pharmacy (약국) 모델
-class Pharmacy(Base):
-    __tablename__ = "Pharmacy"
+# 3. Medicine (의약품) 모델
+class Medicine(Base):
+    __tablename__ = "Medicine"
     
-    pharmacy_id: Mapped[uuid.UUID] = mapped_column(
+    medicine_id: Mapped[uuid.UUID] = mapped_column(
         primary_key=True, 
         default=uuid.uuid4
     )
@@ -37,39 +41,17 @@ class Pharmacy(Base):
         nullable=False
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
-    address: Mapped[str] = mapped_column(String(255), nullable=False)
-    
-    # 관계 설정
-    user: Mapped["User"] = relationship(back_populates="pharmacies")
-    medicines: Mapped[List["Medicine"]] = relationship(
-        back_populates="pharmacy", 
-        cascade="all, delete-orphan"
-    )
-
-# 4. Medicine (의약품) 모델
-class Medicine(Base):
-    __tablename__ = "Medicine"
-    
-    medicine_id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, 
-        default=uuid.uuid4
-    )
-    pharmacy_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("Pharmacy.pharmacy_id", ondelete="CASCADE"), 
-        nullable=False
-    )
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
     # ATC 코드는 NULL 허용이므로 Optional로 지정
-    atc4: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    
+    atc4: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, default='')
+    pt_status: Mapped[str] = mapped_column(String(50), nullable=False, default='NONE')
     # 관계 설정
-    pharmacy: Mapped["Pharmacy"] = relationship(back_populates="medicines")
+    user: Mapped["User"] = relationship(back_populates="medicines")
     weekly_sales: Mapped[List["WeeklySales"]] = relationship(
         back_populates="medicine", 
         cascade="all, delete-orphan"
     )
 
-# 5. WeeklySales (주차 별 판매량) 모델
+# 4. WeeklySales (주차 별 판매량) 모델
 class WeeklySales(Base):
     __tablename__ = "WeeklySales"
     
