@@ -3,3 +3,4 @@
 __pycache__/
 # macOS 전용 숨김 파일 제외
 .DS_Store
+pretrained/weekly/
