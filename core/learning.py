@@ -14,7 +14,7 @@ class Config():
 class NoDatasetError(Exception):
     pass
 
-class Model():
+class MontlyModel():
     def __init__(self, target_drug_dataset: str):
         csv_file_path = Path(f'{Config.DATASET_PATH}/drug/{target_drug_dataset}.csv')
         if not csv_file_path.is_file():
@@ -66,4 +66,17 @@ class Model():
         return float(self.model.predict([ta_4w + hm_4w + rn_4w + pm_4w])[0])
     
     def save(self, file_name: str):
-        joblib.dump(self.model, f'{Config.PRETRAINED_PATH}/{file_name}')
+        joblib.dump(self.model, f'{Config.PRETRAINED_PATH}/montly/{file_name}')
+
+class WeeklyModel():
+    def __init__(self, X: list[list[float]], Y: list[float]):
+        print('WeeklyModel 학습 시작...')
+        self.model = LinearRegression()
+        self.model.fit(X, Y)
+        print('WeeklyModel 학습 완료.')
+
+    def predict(self, features: list[float]) -> float:
+        return float(self.model.predict([features])[0])
+
+    def save(self, file_name: str):
+        joblib.dump(self.model, f'{Config.PRETRAINED_PATH}/weekly/{file_name}')
