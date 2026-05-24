@@ -445,47 +445,59 @@ def run_pretrain_background(medicine_id: uuid.UUID):
                 session.commit()
                 return
 
-            # 3. 각 판매 기록에 대해 날짜 계산 및 과거 7일간 기상 정보 수집
-            X = []
-            Y = []
-            wm = WeatherDataManager()
-            KST = timezone(timedelta(hours=9))
+        # 3. 각 판매 기록에 대해 날짜 계산 및 과거 7일간 기상 정보 수집
+        X = []
+        Y = []
+        wm = WeatherDataManager()
+        KST = timezone(timedelta(hours=9))
 
-            for sale in sales_list:
-                try:
-                    ref_date = datetime.strptime(f"{sale.year}-W{sale.week:02d}-1", "%G-W%V-%u").replace(tzinfo=KST)
-                except ValueError:
-                    continue
+        # API 호출 시작
+        for sale in sales_list:
+            try:
+                ref_date = datetime.strptime(f"{sale.year}-W{sale.week:02d}-1", "%G-W%V-%u").replace(tzinfo=KST)
+            except ValueError:
+                continue
 
-                try:
-                    ta, hm, rn, pm = wm.getLast7d(ref_date=ref_date)
-                    features = ta + hm + rn + pm
-                    if len(features) == 28:
-                        X.append(features)
-                        Y.append(float(sale.sales))
-                except Exception as we:
-                    print(f"[Background Task] Weather query failed for week {sale.week} of year {sale.year}: {we}")
-                    continue
+            try:
+                ta, hm, rn, pm = wm.getLast7d(ref_date=ref_date)
+                features = ta + hm + rn + pm
+                if len(features) == 28:
+                    X.append(features)
+                    Y.append(float(sale.sales))
+            except Exception as we:
+                print(f"[Background Task] Weather query failed for week {sale.week} of year {sale.year}: {we}")
+                continue
 
-            if not X:
-                print(f"[Background Task] 기상 매칭 데이터가 없어 학습을 취소합니다. (의약품: {medicine_id})")
-                medicine.pt_status = "FAILED"
+        # API 호출 종료
+        if not X:
+            with client.getSession() as session:
+                medicine = session.execute(
+                    select(Medicine).where(Medicine.medicine_id == medicine_id)
+                ).scalar_one_or_none()
+                if medicine:
+                    medicine.pt_status = "FAILED"
+                    session.commit()
+            print(f"[Background Task] 기상 매칭 데이터가 없어 학습을 취소합니다. (의약품: {medicine_id})")
+            return
+
+        # 4. WeeklyModel 객체를 생성하여 학습 진행 (세션 외부에서 무거운 연산 실행)
+        model = WeeklyModel(X, Y)
+
+        # 5. 모델을 .pt 파일로 저장 (세션 외부에서 디스크 I/O 실행)
+        weekly_dir = os.path.join(LearningConfig.PRETRAINED_PATH, "weekly")
+        os.makedirs(weekly_dir, exist_ok=True)
+        model_file_name = f"{medicine_id}.pt"
+        model.save(model_file_name)
+
+        # 6. 학습 상태 완료 처리 (오직 트랜잭션 업데이트만 위해 짧은 세션 기동)
+        with client.getSession() as session:
+            medicine = session.execute(
+                select(Medicine).where(Medicine.medicine_id == medicine_id)
+            ).scalar_one_or_none()
+            if medicine:
+                medicine.pt_status = "DONE"
                 session.commit()
-                return
-
-            # 4. WeeklyModel 객체를 생성하여 학습 진행
-            model = WeeklyModel(X, Y)
-
-            # 5. 모델을 .pt 파일로 저장 (파일명: {medicine_id}.pt)
-            weekly_dir = os.path.join(LearningConfig.PRETRAINED_PATH, "weekly")
-            os.makedirs(weekly_dir, exist_ok=True)
-            model_file_name = f"{medicine_id}.pt"
-            model.save(model_file_name)
-
-            # 6. 학습 상태 완료 처리
-            medicine.pt_status = "DONE"
-            session.commit()
-            print(f"[Background Task] 의약품 {medicine_id}에 대한 사전학습이 성공적으로 종료되었습니다.")
+                print(f"[Background Task] 의약품 {medicine_id}에 대한 사전학습이 성공적으로 종료되었습니다.")
 
     except Exception as e:
         print(f"[Background Task] 의약품 {medicine_id} 사전학습 중 서버 오류 발생: {str(e)}")
