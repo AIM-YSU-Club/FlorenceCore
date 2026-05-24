@@ -239,6 +239,7 @@ def predict_next_7d(
             features = ta + hm + rn + pm
             try:
                 predicted_value = float(model.predict([features])[0])
+                print(predicted_value)
                 predicted_value = max(0.0, predicted_value)  # 음수 판매량 방어
             except Exception as pe:
                 raise HTTPException(
