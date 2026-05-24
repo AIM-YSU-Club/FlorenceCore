@@ -112,7 +112,7 @@ def unregister(current_user_email: str = Depends(get_current_user)):
             # 1. 회원 탈퇴 전 해당 회원의 모든 의약품 ID 수집
             medicine_ids = [m.medicine_id for m in user.medicines]
 
-            # 2. 유저 삭제 (cascade 설정에 의해 Medicine 및 WeeklySales는 자동 연쇄 삭제됨)
+            # 2. 유저 삭제 (cascade 설정에 의해 Medicine 및 DailySales는 자동 연쇄 삭제됨)
             session.delete(user)
             session.commit()
 
