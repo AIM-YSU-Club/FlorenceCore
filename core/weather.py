@@ -211,6 +211,43 @@ class WeatherDataManager():
         # return (ta_list, hm_list, rn_list, pm_list)
         return (ta_list, hm_list, rn_list)
 
+    def getWeatherRange(self, start_date, end_date) -> pd.DataFrame:
+        """start_date부터 end_date까지의 기온(TA_AVG), 습도(HM_AVG), 강수량(RN_DAY) 조회"""
+        print(f"지난 날씨 API 일괄 호출 중... 범위: {start_date.strftime('%Y%m%d')} ~ {end_date.strftime('%Y%m%d')}")
+        response = requests.get(
+            url=Config.KMA_WETATHER_URL, 
+            params={
+                'tm1': start_date.strftime('%Y%m%d'),
+                'tm2': end_date.strftime('%Y%m%d'),
+                'stn': str(Config.KMA_WEATHER_STN),
+                'authKey': Config.KMA_API_KEY
+            }
+        )
+        response.raise_for_status()
+        
+        weather_df = pd.read_csv(
+            io.StringIO(response.text),
+            sep=r'\s+',
+            comment='#',
+            names=Config.WEATHER_RESPONSE_COLUMNS,
+            dtype={'TM': str, 'STN': str},
+            na_values=Config.WEATHER_NA_VALUES,
+            engine='python'
+        )
+        
+        weather_df['TM'] = pd.to_datetime(weather_df['TM'], format='%Y%m%d', errors='coerce')
+        weather_df.set_index('TM', inplace=True)
+        
+        # timezone-naive 인덱스를 KST 시간대로 지역화하여 timezone-aware 인덱스와 매칭되도록 보장
+        if weather_df.index.tz is None:
+            weather_df.index = weather_df.index.tz_localize(self.KST)
+        
+        # 날짜 범위 재색인하여 일자별 정합성 확보
+        all_dates = pd.date_range(start=start_date, end=end_date, freq='D')
+        weather_df = weather_df.reindex(all_dates)
+        
+        return weather_df[['TA_AVG', 'HM_AVG', 'RN_DAY']].fillna(0)
+
 # wm = WeatherDataManager()
 # result = wm.getLast7d()
 # for r in result:
