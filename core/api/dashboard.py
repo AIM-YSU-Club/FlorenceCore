@@ -62,6 +62,10 @@ class MedicineItem(BaseModel):
     atc4: Optional[str] = Field(
         None, description='ATC 4단계 분류 코드'
     )
+    pt_status: str = Field(
+        ...,
+        description='사전 학습 프로세스 상태'
+    )
     
     class Config:
         from_attributes = True
