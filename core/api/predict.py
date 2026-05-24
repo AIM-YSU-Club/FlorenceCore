@@ -5,6 +5,7 @@ import uuid
 import joblib
 import dotenv, os
 from pathlib import Path
+from datetime import datetime, timedelta
 
 from sqlalchemy import select, exists
 from sqlalchemy.exc import SQLAlchemyError
@@ -227,11 +228,15 @@ def predict_next_7d(
                 )
 
 
-            # 5. 다음 7일 예상 판매량 예측 진행 (28개 독립변수 입력)
-            features = ta + hm + rn
+            # 5. 다음 7일 예상 판매량 예측 진행 (3개 평균 독립변수 입력)
             try:
+                ta_mean = sum(ta) / len(ta) if ta else 0.0
+                hm_mean = sum(hm) / len(hm) if hm else 0.0
+                rn_mean = sum(rn) / len(rn) if rn else 0.0
+                features = [ta_mean, hm_mean, rn_mean]
+                
                 predicted_value = float(model.predict([features])[0])
-                print(predicted_value)
+                print(f"Raw prediction value: {predicted_value}")
                 predicted_value = max(0.0, predicted_value)  # 음수 판매량 방어
             except Exception as pe:
                 raise HTTPException(
@@ -239,11 +244,30 @@ def predict_next_7d(
                     detail=f"예측 추론 실행 중 오류가 발생했습니다: {str(pe)}"
                 )
 
-            # 6. 평균 주간 판매량 계산
-            sales_stmt = select(WeeklySales).where(WeeklySales.medicine_id == medicine_id)
+            # 6. 평균 주간 판매량 계산 (7일씩 합산의 평균)
+            sales_stmt = select(DailySales).where(DailySales.medicine_id == medicine_id).order_by(DailySales.date)
             sales_list = session.scalars(sales_stmt).all()
             if sales_list:
-                mean_value = sum(sale.sales for sale in sales_list) / len(sales_list)
+                sales_lookup = {sale.date: sale.sales for sale in sales_list}
+                dates = [datetime.strptime(str(sale.date), "%Y%m%d") for sale in sales_list]
+                min_date = min(dates)
+                max_date = max(dates)
+                
+                current_day = min_date
+                limit_day = max_date - timedelta(days=6)
+                
+                weekly_sums = []
+                while current_day <= limit_day:
+                    y_dates_int = [int((current_day + timedelta(days=i)).strftime('%Y%m%d')) for i in range(7)]
+                    total_sales = sum(sales_lookup.get(dt_int, 0) for dt_int in y_dates_int)
+                    weekly_sums.append(total_sales)
+                    current_day += timedelta(days=1)
+                
+                if weekly_sums:
+                    mean_value = sum(weekly_sums) / len(weekly_sums)
+                else:
+                    # 데이터가 7일보다 적은 경우 단순히 전체 판매량의 합을 사용
+                    mean_value = float(sum(sale.sales for sale in sales_list))
             else:
                 mean_value = 0.0
 
