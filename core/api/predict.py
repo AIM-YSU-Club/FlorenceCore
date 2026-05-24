@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query, Depends, HTTPException, status
 from pydantic import BaseModel, Field
+from sklearn.linear_model import LinearRegression
 import uuid
 import joblib
 import dotenv, os
@@ -11,7 +12,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from db.client import PSQLClient
 from db.models import *
 from core.weather import WeatherDataManager
-from core.learning import MontlyModel, NoDatasetError, Config as LearningConfig
+from core.learning import MontlyModel, WeeklyModel, NoDatasetError, Config as LearningConfig
 from core.security import get_current_user
 
 dotenv.load_dotenv()
@@ -49,11 +50,6 @@ class MontlyPredictRes(BaseModel):
         ...,
         description='지난 4주간(어제까지)의 주차별 평균 강수량. 단위는 mm',
         examples=["[0, 1.65, 0.57, 1.14]"]
-    )
-    pm_4w: list[float] = Field(
-        ...,
-        description='지난 4주간(어제까지)의 주차별 평균 미세먼지 농도. 단위는 ug/㎥',
-        examples=["[39.86, 32.21, 19.24, 19.8]"]
     )
     predicted_value: float = Field(
         ..., # 필수 값
@@ -97,10 +93,10 @@ def predict_next_4w(
         model = MontlyModel(target)
 
         wm = WeatherDataManager()
-        ta, hm, rn, pm = wm.getLast4w()
+        ta, hm, rn = wm.getLast4w()
 
         # 예측치
-        predicted_value = model.predict(ta, hm, rn, pm)
+        predicted_value = model.predict(ta, hm, rn)
 
         # 3년간의 월 사용량 평균
         drug_count_mean = model.getDrugCountMean()
@@ -112,7 +108,6 @@ def predict_next_4w(
             'ta_4w': ta,
             'hm_4w': hm,
             'rn_4w': rn,
-            'pm_4w': pm,
             'predicted_value': predicted_value,
             'mean_value': drug_count_mean,
             'growth_rate': growth_rate
@@ -154,11 +149,6 @@ class WeeklyPredictRes(BaseModel):
         description='지난 7일간(어제까지)의 일 평균 강수량. 단위는 mm',
         examples=["[0, 1.65, 0.57, 1.14]"]
     )
-    pm_7d: list[float] = Field(
-        ...,
-        description='지난 7일간(어제까지)의 일 평균 미세먼지 농도. 단위는 ug/㎥',
-        examples=["[39.86, 32.21, 19.24, 19.8]"]
-    )
     predicted_value: float = Field(
         ..., # 필수 값
         description="해당 의약품에 대해 모델이 예측한 다음 7일간의 예상 판매량",
@@ -187,6 +177,7 @@ def predict_next_7d(
 ):
     try:
         client = PSQLClient()
+
         with client.getSession() as session:
             # 1. 로그인 유저 조회
             user_stmt = select(User).where(User.email == current_user_email)
@@ -217,6 +208,16 @@ def predict_next_7d(
                     detail="해당 의약품의 사전 학습 모델이 완료되지 않았거나 존재하지 않습니다. 먼저 학습을 수행해 주세요."
                 )
             
+            # 4. 과거 7일 날씨 정보 조회 (getLast7d 호출)
+            try:
+                wm = WeatherDataManager()
+                ta, hm, rn = wm.getLast7d()
+            except Exception as we:
+                raise HTTPException(
+                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                    detail=f"기상청 API 연동 과정에서 오류가 발생했습니다: {str(we)}"
+                )
+
             try:
                 model = joblib.load(pt_file_path)
             except Exception as le:
@@ -225,18 +226,9 @@ def predict_next_7d(
                     detail=f"모델 파일을 불러오지 못했습니다: {str(le)}"
                 )
 
-            # 4. 과거 7일 날씨 정보 조회 (getLast7d 호출)
-            try:
-                wm = WeatherDataManager()
-                ta, hm, rn, pm = wm.getLast7d()
-            except Exception as we:
-                raise HTTPException(
-                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                    detail=f"기상청 API 연동 과정에서 오류가 발생했습니다: {str(we)}"
-                )
 
             # 5. 다음 7일 예상 판매량 예측 진행 (28개 독립변수 입력)
-            features = ta + hm + rn + pm
+            features = ta + hm + rn
             try:
                 predicted_value = float(model.predict([features])[0])
                 print(predicted_value)
@@ -266,7 +258,6 @@ def predict_next_7d(
                 "ta_7d": ta,
                 "hm_7d": hm,
                 "rn_7d": rn,
-                "pm_7d": pm,
                 "predicted_value": predicted_value,
                 "mean_value": mean_value,
                 "growth_rate": growth_rate

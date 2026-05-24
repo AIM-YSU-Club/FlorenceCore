@@ -33,7 +33,7 @@ class WeatherDataManager():
         self.KST = timezone(timedelta(hours=9))
         pass
 
-    def getLast4w(self) -> tuple[list, list, list, list]:
+    def getLast4w(self) -> tuple[list, list, list]:
         kst_now = datetime.now(self.KST)
         tm1 = kst_now - timedelta(days=28)
         tm2 = kst_now - timedelta(days=1)
@@ -118,7 +118,7 @@ class WeatherDataManager():
         # return (ta_avgs, hm_avgs, rn_avgs, pm_avgs)
         return (ta_avgs, hm_avgs, rn_avgs)
 
-    def getLast7d(self, ref_date=None) -> tuple[list, list, list, list]:
+    def getLast7d(self, ref_date=None) -> tuple[list, list, list]:
         if ref_date is None:
             kst_now = datetime.now(self.KST)
         else:
