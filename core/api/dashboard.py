@@ -156,6 +156,36 @@ def update_pharmacy(
         )
 
 @router.get(
+    "/pharmacy",
+    response_model=PharmacyUpdateRes,
+    status_code=200,
+    summary="약국 정보 조회 API",
+    description="인증된 로그인 약사의 약국 이름과 주소를 조회합니다."
+)
+def get_pharmacy(
+    current_user_email: str = Depends(get_current_user)
+):
+    try:
+        client = PSQLClient()
+        with client.getSession() as session:
+            # 1. 로그인 유저 조회
+            user_stmt = select(User).where(User.email == current_user_email)
+            user = session.scalar(user_stmt)
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="인증된 사용자 정보를 찾을 수 없습니다."
+                )
+
+            return PharmacyUpdateRes.model_validate(user)
+
+    except SQLAlchemyError as se:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"데이터베이스 오류: {se}"
+        )
+
+@router.get(
     '/get_medicines',
     response_model=MedicineListRes,
     status_code=200,
@@ -459,9 +489,9 @@ def run_pretrain_background(medicine_id: uuid.UUID):
                 continue
 
             try:
-                ta, hm, rn, pm = wm.getLast7d(ref_date=ref_date)
-                features = ta + hm + rn + pm
-                if len(features) == 28:
+                ta, hm, rn = wm.getLast7d(ref_date=ref_date)
+                features = ta + hm + rn
+                if len(features) == 21:
                     X.append(features)
                     Y.append(float(sale.sales))
             except Exception as we:
