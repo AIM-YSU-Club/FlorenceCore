@@ -84,8 +84,8 @@ class WeeklyModel():
     def save(self, file_name: str):
         joblib.dump(self.model, f'{Config.PRETRAINED_PATH}/weekly/{file_name}')
 
-import glob
-codes = ['N02BE', 'R01BA', 'R05CA', 'R05CB', 'R05DB', 'R05FA', 'R06AE', 'R06AX']
-for c in codes:
-    mm = MontlyModel(c)
-    mm.save(f'{c}.pt')
+# import glob
+# codes = ['N02BE', 'R01BA', 'R05CA', 'R05CB', 'R05DB', 'R05FA', 'R06AE', 'R06AX']
+# for c in codes:
+#     mm = MontlyModel(c)
+#     mm.save(f'{c}.pt')
