@@ -23,14 +23,16 @@ class MontlyModel():
         self.df_ta = pd.read_csv(f'{Config.DATASET_PATH}/kma/temperature.csv').add_prefix('ta_')
         self.df_hm = pd.read_csv(f'{Config.DATASET_PATH}/kma/humidity.csv').add_prefix('hm_')
         self.df_rn = pd.read_csv(f'{Config.DATASET_PATH}/kma/rainfall.csv').add_prefix('rn_')
-        self.df_pm = pd.read_csv(f'{Config.DATASET_PATH}/kma/pm10.csv').add_prefix('pm_')
+        # self.df_pm = pd.read_csv(f'{Config.DATASET_PATH}/kma/pm10.csv').add_prefix('pm_')
         self.drug_df = pd.read_csv(f'{Config.DATASET_PATH}/drug/{target_drug_dataset}.csv')
         
-        X = pd.concat([self.df_ta, self.df_hm, self.df_rn, self.df_pm], axis=1)
+        # X = pd.concat([self.df_ta, self.df_hm, self.df_rn, self.df_pm], axis=1)
+        X = pd.concat([self.df_ta, self.df_hm, self.df_rn], axis=1)
         print(f'데이터셋 정보:\n{X.info()}')
         print('데이터셋 불러오기 완료')
 
-        X.drop(['ta_ym', 'hm_ym', 'rn_ym', 'pm_ym'], axis=1, inplace=True)
+        # X.drop(['ta_ym', 'hm_ym', 'rn_ym', 'pm_ym'], axis=1, inplace=True)
+        X.drop(['ta_ym', 'hm_ym', 'rn_ym'], axis=1, inplace=True)
         # 결측치(NaN)를 안전하게 0으로 채우기
         X.fillna(0, inplace=True)
         Y = self.drug_df['value']
@@ -62,11 +64,12 @@ class MontlyModel():
     def getDrugCountMean(self) -> float:
         return self.drug_df['value'].mean()
         
-    def predict(self, ta_4w: list[float], hm_4w: list[float], rn_4w: list[float], pm_4w: list[float]) -> float:
-        return float(self.model.predict([ta_4w + hm_4w + rn_4w + pm_4w])[0])
+    # def predict(self, ta_4w: list[float], hm_4w: list[float], rn_4w: list[float], pm_4w: list[float]) -> float:
+    def predict(self, ta_4w: list[float], hm_4w: list[float], rn_4w: list[float]) -> float:
+        return float(self.model.predict([ta_4w + hm_4w + rn_4w])[0])
     
     def save(self, file_name: str):
-        joblib.dump(self.model, f'{Config.PRETRAINED_PATH}/montly/{file_name}')
+        joblib.dump(self.model, f'{Config.PRETRAINED_PATH}/monthly/{file_name}')
 
 class WeeklyModel():
     def __init__(self, X: list[list[float]], Y: list[float]):
@@ -80,3 +83,9 @@ class WeeklyModel():
 
     def save(self, file_name: str):
         joblib.dump(self.model, f'{Config.PRETRAINED_PATH}/weekly/{file_name}')
+
+import glob
+codes = ['N02BE', 'R01BA', 'R05CA', 'R05CB', 'R05DB', 'R05FA', 'R06AE', 'R06AX']
+for c in codes:
+    mm = MontlyModel(c)
+    mm.save(f'{c}.pt')

@@ -54,19 +54,19 @@ class WeatherDataManager():
         weather_response.raise_for_status()
 
         # 미세먼지(PM10) API
-        print('미세먼지 API 호출 중...')
+        # print('미세먼지 API 호출 중...')
 
-        pm10_response = requests.get(
-            url=Config.KMA_PM10_URL,
-            params={
-                'tm_st': f'{tm1.strftime('%Y%m%d')}00',
-                'tm': f'{tm2.strftime('%Y%m%d')}23',
-                'stn': str(Config.KMA_PM10_STNS[0]),
-                'authKey': Config.KMA_API_KEY,
-                'data': '1'
-            }
-        )
-        pm10_response.raise_for_status()
+        # pm10_response = requests.get(
+        #     url=Config.KMA_PM10_URL,
+        #     params={
+        #         'tm_st': f'{tm1.strftime('%Y%m%d')}00',
+        #         'tm': f'{tm2.strftime('%Y%m%d')}23',
+        #         'stn': str(Config.KMA_PM10_STNS[0]),
+        #         'authKey': Config.KMA_API_KEY,
+        #         'data': '1'
+        #     }
+        # )
+        # pm10_response.raise_for_status()
 
         weather_df = pd.read_csv(
             io.StringIO(weather_response.text),
@@ -91,31 +91,32 @@ class WeatherDataManager():
             hm_avgs.append(round(float(row.loc['HM_AVG']), 2))
             rn_avgs.append(round(float(row.loc['RN_DAY']), 2))
 
-        pm_avgs = []
+        # pm_avgs = []
 
-        pm10_df = pd.read_csv(
-            io.StringIO(pm10_response.text),
-            sep=r'\s+',
-            comment='#',
-            names=Config.PM10_RESPONSE_COLUMNS,
-            dtype={'TM': str, 'STN': str, 'AVG': str},
-            engine='python'
-        )
+        # pm10_df = pd.read_csv(
+        #     io.StringIO(pm10_response.text),
+        #     sep=r'\s+',
+        #     comment='#',
+        #     names=Config.PM10_RESPONSE_COLUMNS,
+        #     dtype={'TM': str, 'STN': str, 'AVG': str},
+        #     engine='python'
+        # )
 
-        pm10_df['AVG'] = pd.to_numeric(pm10_df['AVG'].str.split('(').str[0], errors='coerce').astype('Int64')
-        pm10_df = pm10_df[['TM', 'AVG']]
+        # pm10_df['AVG'] = pd.to_numeric(pm10_df['AVG'].str.split('(').str[0], errors='coerce').astype('Int64')
+        # pm10_df = pm10_df[['TM', 'AVG']]
 
-        pm10_df['TM'] = pd.to_datetime(pm10_df['TM'], format='%Y.%m.%d.%H:%M', errors='coerce')
-        pm10_df.set_index('TM', inplace=True)
+        # pm10_df['TM'] = pd.to_datetime(pm10_df['TM'], format='%Y.%m.%d.%H:%M', errors='coerce')
+        # pm10_df.set_index('TM', inplace=True)
 
-        today = datetime.now().date()
-        start_date = pd.Timestamp(today - timedelta(days=28))
-        end_date = pd.Timestamp(today - timedelta(days=1)) + pd.Timedelta(hours=23)
+        # today = datetime.now().date()
+        # start_date = pd.Timestamp(today - timedelta(days=28))
+        # end_date = pd.Timestamp(today - timedelta(days=1)) + pd.Timedelta(hours=23)
 
-        filtered_df = pm10_df.loc[start_date:end_date]
-        pm_avgs = filtered_df['AVG'].resample('7D').mean().round(2).to_list()
+        # filtered_df = pm10_df.loc[start_date:end_date]
+        # pm_avgs = filtered_df['AVG'].resample('7D').mean().round(2).to_list()
 
-        return (ta_avgs, hm_avgs, rn_avgs, pm_avgs)
+        # return (ta_avgs, hm_avgs, rn_avgs, pm_avgs)
+        return (ta_avgs, hm_avgs, rn_avgs)
 
     def getLast7d(self, ref_date=None) -> tuple[list, list, list, list]:
         if ref_date is None:
@@ -144,18 +145,18 @@ class WeatherDataManager():
         weather_response.raise_for_status()
 
         # 미세먼지(PM10) API 호출
-        print('지난 7일간 미세먼지 API 호출 중...')
-        pm10_response = requests.get(
-            url=Config.KMA_PM10_URL,
-            params={
-                'tm_st': f'{tm1.strftime("%Y%m%d")}00',
-                'tm': f'{tm2.strftime("%Y%m%d")}23',
-                'stn': str(Config.KMA_PM10_STNS[0]),
-                'authKey': Config.KMA_API_KEY,
-                'data': '1'
-            }
-        )
-        pm10_response.raise_for_status()
+        # print('지난 7일간 미세먼지 API 호출 중...')
+        # pm10_response = requests.get(
+        #     url=Config.KMA_PM10_URL,
+        #     params={
+        #         'tm_st': f'{tm1.strftime("%Y%m%d")}00',
+        #         'tm': f'{tm2.strftime("%Y%m%d")}23',
+        #         'stn': str(Config.KMA_PM10_STNS[0]),
+        #         'authKey': Config.KMA_API_KEY,
+        #         'data': '1'
+        #     }
+        # )
+        # pm10_response.raise_for_status()
 
         # 7일간의 날짜 인덱스 구성 (ascending order)
         date_list = [kst_now.date() - timedelta(days=i) for i in range(7, 0, -1)]
@@ -185,29 +186,30 @@ class WeatherDataManager():
         rn_list = ta_hm_rn_df['RN_DAY'].round(2).tolist()
 
         # 2. 미세먼지 데이터 파싱 및 일평균 계산
-        pm10_df = pd.read_csv(
-            io.StringIO(pm10_response.text),
-            sep=r'\s+',
-            comment='#',
-            names=Config.PM10_RESPONSE_COLUMNS,
-            dtype={'TM': str, 'STN': str, 'AVG': str},
-            engine='python'
-        )
+        # pm10_df = pd.read_csv(
+        #     io.StringIO(pm10_response.text),
+        #     sep=r'\s+',
+        #     comment='#',
+        #     names=Config.PM10_RESPONSE_COLUMNS,
+        #     dtype={'TM': str, 'STN': str, 'AVG': str},
+        #     engine='python'
+        # )
 
-        pm10_df['AVG'] = pd.to_numeric(pm10_df['AVG'].str.split('(').str[0], errors='coerce').astype('Int64')
-        pm10_df = pm10_df[['TM', 'AVG']]
+        # pm10_df['AVG'] = pd.to_numeric(pm10_df['AVG'].str.split('(').str[0], errors='coerce').astype('Int64')
+        # pm10_df = pm10_df[['TM', 'AVG']]
 
-        pm10_df['TM'] = pd.to_datetime(pm10_df['TM'], format='%Y.%m.%d.%H:%M', errors='coerce')
-        pm10_df.set_index('TM', inplace=True)
+        # pm10_df['TM'] = pd.to_datetime(pm10_df['TM'], format='%Y.%m.%d.%H:%M', errors='coerce')
+        # pm10_df.set_index('TM', inplace=True)
 
-        # 일 단위(resample 'D')로 00시 ~ 23시 미세먼지 수치의 평균 산출
-        pm10_daily = pm10_df['AVG'].resample('D').mean()
+        # # 일 단위(resample 'D')로 00시 ~ 23시 미세먼지 수치의 평균 산출
+        # pm10_daily = pm10_df['AVG'].resample('D').mean()
         
-        # 7일 날짜 인덱스로 재색인하여 정합성 및 순서 보장 (누락값 0 처리)
-        pm10_daily = pm10_daily.reindex(date_index).fillna(0)
-        pm_list = pm10_daily.round(2).tolist()
+        # # 7일 날짜 인덱스로 재색인하여 정합성 및 순서 보장 (누락값 0 처리)
+        # pm10_daily = pm10_daily.reindex(date_index).fillna(0)
+        # pm_list = pm10_daily.round(2).tolist()
 
-        return (ta_list, hm_list, rn_list, pm_list)
+        # return (ta_list, hm_list, rn_list, pm_list)
+        return (ta_list, hm_list, rn_list)
 
 # wm = WeatherDataManager()
 # result = wm.getLast7d()
