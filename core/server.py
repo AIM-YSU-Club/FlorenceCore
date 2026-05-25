@@ -17,6 +17,7 @@ from core.api.auth import router as auth_router
 from core.api.predict import router as predict_router
 from core.api.dashboard import router as dashboard_router
 
+# API 라우팅
 app.include_router(auth_router)
 app.include_router(predict_router)
 app.include_router(dashboard_router)
