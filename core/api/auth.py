@@ -12,7 +12,9 @@ from db.models import User
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # 회원가입 및 로그인, 토큰 검증
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-from core.security import UserRegister, Token, hash_password, verify_password, get_current_user, create_access_token
+import time
+import jwt
+from core.security import UserRegister, Token, hash_password, verify_password, get_current_user, create_access_token, Config, oauth2_scheme
 
 router = APIRouter(prefix='/auth', tags=['Authentication'])
 
@@ -136,3 +138,51 @@ def unregister(current_user_email: str = Depends(get_current_user)):
     
     return {"message": "회원 탈퇴가 성공적으로 완료되었습니다."}
 
+
+@router.get(
+    "/verify", 
+    summary='JWT 토큰 유효성 및 남은 만료 시간 확인 API'
+)
+def verify_token_session(token: str = Depends(oauth2_scheme)):
+    """현재 토큰의 유효성을 검사하고 남은 시간을 초(seconds) 단위로 반환합니다."""
+    try:
+        # 1. 토큰 디코딩 및 검증
+        # 이미 만료된 토큰이라면 여기서 jwt.ExpiredSignatureError가 발생합니다.
+        payload = jwt.decode(token, Config.SECRET_KEY, algorithms=[Config.ALGORITHM])
+        
+        # 2. 페이로드에서 만료 시간(exp) 추출
+        exp_timestamp = payload.get("exp")
+        
+        if not exp_timestamp:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, 
+                detail="토큰에 만료 시간 정보가 포함되어 있지 않습니다."
+            )
+            
+        # 3. 현재 시간과 비교하여 남은 시간 계산
+        current_timestamp = time.time()
+        remaining_seconds = int(exp_timestamp - current_timestamp)
+        
+        # (방어 로직) 혹시라도 시간이 0 이하로 남았다면 만료 처리
+        if remaining_seconds <= 0:
+            raise jwt.ExpiredSignatureError()
+
+        return {
+            "message": "유효한 토큰입니다.",
+            "is_valid": True,
+            "remaining_seconds": remaining_seconds,
+            "user_email": payload.get("sub")
+        }
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="토큰이 만료되었습니다.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except jwt.PyJWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="유효하지 않은 토큰입니다.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
