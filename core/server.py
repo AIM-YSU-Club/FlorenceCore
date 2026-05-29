@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 # env
 import dotenv, os
 
@@ -8,10 +10,20 @@ dotenv.load_dotenv()
 class Config():
     SERVER_PORT=int(os.getenv('SERVER_PORT'))
     DATASET_PATH=os.getenv('DATASET_PATH')
+    ALLOW_ORIGIN=os.getenv('ALLOW_ORIGIN')
 
 
 # FastAPI 앱 설정
 app = FastAPI(title="Florence")
+
+# CORS allow origin 추가
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[Config.ALLOW_ORIGIN],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 from core.api.auth import router as auth_router
 from core.api.predict import router as predict_router
